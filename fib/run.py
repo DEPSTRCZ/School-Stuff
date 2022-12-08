@@ -1,12 +1,12 @@
 number = int(input("Zadej číslo:\n"))
-print(0)
-print(1)
-print(1)
-mem1 = 1
-mem2 = 0
+print("---------")
+if number < 0:print("Chyba: Číslo je záporné!")
+mem1 = 0
+mem2 = 1
 count = 1
 while count < number:
-    x = count+mem1
-    print(x)
-    mem1 = x
+    num = mem1+mem2
+    print(num)
+    mem1 = mem2
+    mem2 = num
     count += 1

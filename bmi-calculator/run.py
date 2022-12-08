@@ -1,4 +1,3 @@
-import math
 height = int(input("Zadejte výšku(cm)\n")) / 100
 height = height*height
 weight = int(input("Zadejte hmotnost(Kg)\n"))
