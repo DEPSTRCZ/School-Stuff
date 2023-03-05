@@ -51,7 +51,7 @@
 1. Zapneme Virtuální počítač "`Play virtual mechine`"
 2. Počkáme než se zapne a načte systém do operačního řádku
 3. Zjistíme si jméno disku na kterém budeme dělat partice = `fdisk -l` = Můj disk = `/dev/sda`
-4. Začneme proces dělaná particí = `fdisk /dev/sda` ve většině případů /dev/sda může se ovšem lišit.. 
+4. Začneme proces dělaná particí *= `fdisk /dev/sda` ve většině případů `/dev/sda` může se ovšem lišit..*
 5. Napíšeme `o` pro vytvoření nového partition table
 6. Napíšeme `n` pro zvolení typu oddílu/partition
 7. Vybereme `p` pro primární typ oddílu
@@ -74,8 +74,28 @@
 
 ## 2,4 Nastavení LVM
 ### 2,4,1 Tvorba fyzického svazku
-1. Napíšeme `pvcreate --dataalignment 1m /dev/sda1` = vytvoří fyzický svazek a srovná na dnešní standard 1m na oddílu `/dev/sda1`
-## 2,4,2 Tvorba logické skupiny
-1. Napíšeme  `vgcreate volumegroup0 /dev/sda1` = `volumegroup0` jako jmeno a `/dev/sda1` jak jméno svazku
-## 2,4,3 Tvorba logických LVM skupin
-1. Napíšeme `lvcreate -L 10GB volumegroup0 /dev/sda1 -n lvroot` = 
+1. Napíšeme `pvcreate --dataalignment 1m /dev/sda1` *= vytvoří fyzický svazek a srovná na dnešní standard 1m na oddílu `/dev/sda1`*
+![[2,4,1.gif]]
+
+### 2,4,2 Tvorba skupiny svazků
+1. Napíšeme  `vgcreate volumegroup0 /dev/sda1` *= `volumegroup0` jako jmeno a `/dev/sda1` jak jméno svazku*
+![[2,4,2.gif]]
+
+### 2,4,3 Tvorba logických LVM svazků
+1. Napíšeme `lvcreate -L 10GB volumegroup0 /dev/sda1 -n lvroot` pro vytvoření skupiny lvroot *= `10GB` jako velikost skupiny, `volumegroup0` jméno naší logické skupiny, `/dev/sda1` je požadovaný oddíl, `-n lvroot` jako jméno naší skupiny*![[2,4,3,0.gif]]
+
+2. Napíšeme `lvcreate -L 15B volumegroup0 /dev/sda1 -n lvhome` pro vytvoření skupiny lvhome kde se budou ukládat naše data. Zadaní velikosti můžeme pozměnit jak chceme nebo nastavit aby skupina zaplnila celý zbytek:` -l 100%FREE`= *`15B` jako velikost skupiny, `volumegroup0` jméno naší logické skupiny, `/dev/sda1` je požadovaný oddíl, `-n lvhome` jako jméno naší skupiny*
+![[2,4,3,1.gif]]
+
+### 2,4,4 Načtení naší nové skupiny svazků
+1. Napíšeme `modproble dm_mod` pro načtení našich skupin
+![[2,4,4.gif]]
+
+### 2,4,5 Aktivace skupiny svazků
+1. Napíšeme `vgscan` tím prohledáme systém o logické skupiny aby věděl sčím pracovat
+2. Napíšeme `vgchange -ay` pro aktivaci skupin
+![[2,4,5.gif]]
+
+## 2,5 Formátování logických svazků
+1. Napíšeme `mkfs.ext4 /dev/volumegroup0/lvroot` pro naformátovaní svazku na souborový systém ext4 = `volumegroup0` je naše logická skupina
+
