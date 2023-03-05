@@ -97,5 +97,80 @@
 ![[2,4,5.gif]]
 
 ## 2,5 Formátování logických svazků
-1. Napíšeme `mkfs.ext4 /dev/volumegroup0/lvroot` pro naformátovaní svazku na souborový systém ext4 = `volumegroup0` je naše logická skupina
+1. Napíšeme `mkfs.ext4 /dev/volumegroup0/lvroot` pro naformátovaní `lvroot` svazku na souborový systém ext4 *= `volumegroup0` je naše logická skupina*
+![[2,5,0.gif]]
+
+1. Napíšeme `mkfs.ext4 /dev/volumegroup0/lvhome` pro naformátovaní `lvhome` svazku na souborový systém ext4 *= `volumegroup0` je naše logická skupina*
+![[2,5,1.gif]]
+
+## 2.6 Mountnutí našich logických svazků
+1. Napíšme `mount /dev/volumegroup0/lvroot /mnt` *= mountne svzek na cestu `/mnt`*
+![[2,6,0.gif]]
+
+2. Napíšeme `mkdir /mnt/home/` pro vytvoření cesty kam mountneme svazek `lvhome`
+3. Napíšme `mount /dev/volumegroup0/lvhome /mnt/home` *= mountne svzek na naší vytvořenou cestu `/mnt/home`
+![[2,6,1.gif]]
+
+## 2,7 Dotvoření rozložení diskových oddílů a uložení
+1. Vytvoříme si cestu `/mnt/etc` příkazem `mkdir /mnt/etc` *= `/mnt/etc` je naše cesta*
+2. A uložíme naše rozložení pomocí příkazu `genfstab -U -p /mnt >> /mnt/etc/fstab` a jeho output přesmerujeme do `/mnt/etc/fstab`
+3. Pomocí příkazu `cat` si ověříme zda je vše správně `cat /mnt/etc/fstab` UUID by měl být rozdílné a formát ext4
+![[2,7.gif]]
+
+# 3 Samotná Instalace Arch Linux
+
+## 3,1 Instalace základních balíčků
+1. Pomocí příkazu `pacstrap` nainstalujeme základní balčíky pomocí skupiny `"base"` tedy `pacstrap -i /mnt base` *= `/mnt` je cesta, `base` je název skupiny*
+
+
+## 3,1 Vstup do instalace
+1. Pomocí příkazu `acrch-chroot /mnt` vstoupíme do instalace *= `/mnt` pro cestu*
+
+
+## 3,2 Instalace Linuxového kernelu a headers verze lts
+1. Pomocí instlalačního manažeru  `pacman` stáhneme linuxový kernel verzi lts tedy: `pacman -S linux-lts linux-lts-headers`
+
+
+## 3,3 Instalace podstatných balíčků
+1. Nějaký editor se bude určitě hodit Př: Nano, Vim. Já zvolím editor `"nano"` tedy `pacman -S nano`
+2. Nainstalujeme také vývojové balíčky budou se hodit. `pacman -S base-devel`
+3. Také stáhneme `"networkmanager"` také se bude hodit. `pacman -S networkmanager`
+4. A pro lepší užití můžeme stáhnout `netctl`. `pacman -S netctl`
+5. Zapneme `"NetworkManager"` při startu / bootu zařízení. `systemctl enable NetworkManager`
+6. Také musíme stáhnout `"lvm2"` balíček který je nutný. `pacman -S lvm2`
+
+
+## 3,4 Změnění konfigurace pro lvm
+1. V našem editoru si otevřeme soubor `/etc/mkinitcpio.conf`. `nano /etc/mkinitcpio.conf`
+2. Najdeme řádek který nemá na začáítku # `HOOKS=(base udev autodetect modconf block filesystems keyboard fsck)
+3. Mezi `block` a `filesystems` vložíme `lvm2` s mezerou na každé straně. Takto:  `HOOKS=(base udev autodetect modconf block lvm2 filesystems keyboard fsck)
+4. Uložíme změny
+
+
+### 3,4,1 Potvrzení konfigurace s lvm
+1. Napíšeme `mkinitcpio -p linux-lts` pro "uložení" naší konfigurace *= `linmux-lts` je náš kernel*
+
+
+## 3,5 Nastavení našeho localu
+1. V našem editoru si otevřeme `/etc/locale.gen`. V mém případě `nano /etc/locale.gen`
+2. Najdeme náš local a odstraníme # před daným řádkem
+3. Uložíme
+4. Vygenerujeme nás local příkazem `locale-gen`
+
+
+## 3,6 Konfigurace uživatelů
+### 3,6,1 Změna hesla pro účet root
+1. Nastavíme si nějaké bezpečné heslo pro účet root. `passwd root`
+2. Zadáme heslo
+
+
+### 3,6,2 Tvorba uživatelského účtu
+1. Vytvoříme nového uživatele příkazem `useradd -m -g users -G wheel uživatel` *=* `-m` vytvoří uživatelu složku, `-g users` nastaví primární skupinu na `users`, `-G wheel` přidá uživatele do skupiny `"wheel"` používané pro dávání administrátorských práv, `uživatel` je jméno uživatele 
+2. Nastavíme heslo od uživatele. `passwd uživatel`
+
+
+## 3,7 Konfigurace SUDO
+1. Ujistíme se že sudo je stažené příkazem `which sudo` pokud není tak jej stáhneme `pacman -S sudo`
+2. Donutíme náš editor otevřít konfiguraci sudo. `EDITOR=nano visudo` místo nano můžete vložit jméno vašeho editoru.
+3. Najdeme řádek `# %wheel ALL=(ALL) ALL` odstraníme `"#"` a smažeme mezeru. Takto: `%%wheel ALL=(ALL) ALL` *= Umožnili jsme skupině wheel použivat sudo. Pod touto skupinou je náš uživatel*
 
