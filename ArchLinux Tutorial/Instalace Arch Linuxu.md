@@ -176,3 +176,62 @@
 3. Najdeme řádek `# %wheel ALL=(ALL) ALL` odstraníme `"#"` a smažeme mezeru. Takto: `%%wheel ALL=(ALL) ALL` *= Umožnili jsme skupině wheel použivat sudo. Pod touto skupinou je náš uživatel*
 4. Uložíme![[3,8.gif]]
 
+
+# 4 Instalace GRUB
+## 4,1 Instalace balíčků pro GRUB
+1. Stáhneme balíčky `grub` `dosfstools` `os-prober` `mtools`. Tedy: `pacman -S grub dosfstools os-prober mtools`
+![[4,1.gif]]
+
+## 4,2 Samotná instalace GRUB
+1. Napíšeme instalační příkaz `grub-install`. Tedy: `grub-install --target=i386-pc --recheck /dev/sda` *=`--target=i386-pc` specifikujeme architekturu, `--recheck /dev/sda` specifikujeme zařízení*
+![[4,2.gif]]
+
+## 4,3 Tvorba locale pro GRUB
+1. Ověříme si zda locale existuje pomocí příkazu `ls`   `ls -l /boot/grub` *= `/boot/grub`je cesta
+2. V listu musí být vidět `"locale"`. Pokud není tak jí vytvoříme `mkdir /boot/grub/locale`
+3. Nastavíme anglický locale pro grub / příkazem cp neboli copy zkopírujeme správný soubor z `/usr/share/locale/en\@quot/LC_MESSAGES/grub.mo` do grub složky `/boot/grub/locale/en.mo.` Tedy: `cp /usr/share/locale/en\@quot/LC_MESSAGES/grub.mo /boot/grub/locale/en.mo
+![[4,3.gif]]
+
+## 4,4 Generování GRUB konfigurace
+1. Vytvoříme GRUB konfig příkazem `grub-mkconfig -o /boot/grub/grub.cfg` *`´-mkconfig` jako makeconfig, `-o /boot/grub/grub.cfg` specifikuje cestu*
+![[4,4.gif]]
+
+# 5 Dokončení Instalace Arch Linux
+
+## 5,1 Opuštění instalace
+1. Pro odchod z instalace napíšeme `exit`
+2. A vše unmountnem `umount -a` *= `-a` pro vše*
+3. Pak můžeme `reboot`
+![[5,1.gif]]
+
+## 5,2 Duležitá konfigurace po dokončení instalace
+
+### 5,2,1 Konfigurace času
+1. Najdeme si naší časovou zónu na této [stránce](https://www.epochconverter.com/timezones) moje časová zóna je `"Europe/Prague"`
+2. Nastavíme zónu příkazem:  `timedatectl set-timezone Europe/Prague` 
+![[5,2,1.gif]]
+
+### 5,2,2 Zapnutí synchrinizace času
+1. Napíšeme  `systemctl enable systemd-timesyncd`
+
+
+## 5,3 Stažení Micro Code pro váš procesor
+1. V případě Intelu stáhneme balíček  `intel-ucode `. Tedy:  `pacman -S intel-ucode `
+1. V prípadě Amd stáhneme balíček  `adm-ucode`. Tedy:  `pacman -S amd-ucode ` 
+
+
+
+# 6 Dobrovolné: Instalace Desktopového prostředí GNOME a ostatní.
+>Záleží člověku a na tom k čemu bude zařízení sloužit. Existuje více prostředí ale já použiju prostředí GNOME.
+
+## 6,1 Instalace duležitých balíčků
+1. Nainstalujeme balíček  `xorg-server ` který je potřebný pro chod prostředí. Tedy:  `pacman -S xorg-server `
+2. Nainstalujeme balíček ovladače pro náš grafický čip. Pro Intel integrovanou grafiku:  `mesa`, pro Nvidia:  `nvidia-lts`, pro Wmware:  `xf86-video-wmware`, pro VirtualBox  `virtualbox-guest-utils ` v mém případě stáhnu  `xf86-video-wmware`. Tedy:  `pacman -S xf86-video-wmware` 
+3. A nakonec stáhneme Gnome. Tedy:  `pacman -S gnome`
+
+
+## 6,1 Zapnutí GnomeDesktopManager
+1. Napíšeme příkaz pro zapnutí gdm/GnomeDesktopManager  `systemctl enable gdm`
+
+
+# A Máme Hotovo! 
