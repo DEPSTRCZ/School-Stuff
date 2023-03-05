@@ -6,7 +6,7 @@
 1. Půjdeme na stránku https://archlinux.org/download/
 2. Vybereme nejbližší mirror
 3. Stáhneme [archlinux-2023.03.01-x86_64.iso](https://mirror.dkm.cz/archlinux/iso/2023.03.01/archlinux-2023.03.01-x86_64.iso)
-![[0.gif]]
+![](0.gif)
 
 
 # 1. Tvorba VMware virtálního prostředí!
