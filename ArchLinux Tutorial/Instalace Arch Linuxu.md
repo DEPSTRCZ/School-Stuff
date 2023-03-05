@@ -236,6 +236,7 @@
 ## 6,2 Zapnutí GnomeDesktopManager
 1. Napíšeme příkaz pro zapnutí gdm/GnomeDesktopManager  `systemctl enable gdm`
 2. A poté restartujeme
+
 ![](6,2.gif)
 
 # A Máme Hotovo! 
