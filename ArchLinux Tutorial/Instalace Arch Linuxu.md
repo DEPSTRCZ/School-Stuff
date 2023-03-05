@@ -151,6 +151,7 @@
 
 ### 3,5,1 Potvrzení konfigurace s lvm
 1. Napíšeme `mkinitcpio -p linux-lts` pro "uložení" naší konfigurace *= `linmux-lts` je náš kernel*
+
 ![](3,5,1.gif)
 
 ## 3,6 Nastavení našeho localu
