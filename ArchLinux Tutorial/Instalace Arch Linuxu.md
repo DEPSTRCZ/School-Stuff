@@ -239,7 +239,7 @@
 ![](6,2.gif)
 
 # A Máme Hotovo! 
-![](Pasted image 20230305204708.png)
+![.](final.png)
 
 ## Info
 - © Jiří Edelmann | DEPSTRCZ - 2022
