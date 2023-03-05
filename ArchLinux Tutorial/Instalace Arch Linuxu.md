@@ -1,6 +1,7 @@
 
 # 0. Stažení iso souboru
 >Tento soubor se používá k vytvoření bootovatelného média, které umožňuje instalaci operačního systému na nový počítač nebo jeho obnovu.
+
 ## 0.1 Stažení
 1. Půjdeme na stránku https://archlinux.org/download/
 2. Vybereme nejbližší mirror
@@ -213,12 +214,12 @@
 
 ### 5,2,2 Zapnutí synchrinizace času
 1. Napíšeme  `systemctl enable systemd-timesyncd`
-
+![[5,2,2.gif]]
 
 ## 5,3 Stažení Micro Code pro váš procesor
 1. V případě Intelu stáhneme balíček  `intel-ucode `. Tedy:  `pacman -S intel-ucode `
 1. V prípadě Amd stáhneme balíček  `adm-ucode`. Tedy:  `pacman -S amd-ucode ` 
-
+![[5,3.gif]]
 
 
 # 6 Dobrovolné: Instalace Desktopového prostředí GNOME a ostatní.
@@ -228,10 +229,23 @@
 1. Nainstalujeme balíček  `xorg-server ` který je potřebný pro chod prostředí. Tedy:  `pacman -S xorg-server `
 2. Nainstalujeme balíček ovladače pro náš grafický čip. Pro Intel integrovanou grafiku:  `mesa`, pro Nvidia:  `nvidia-lts`, pro Wmware:  `xf86-video-wmware`, pro VirtualBox  `virtualbox-guest-utils ` v mém případě stáhnu  `xf86-video-wmware`. Tedy:  `pacman -S xf86-video-wmware` 
 3. A nakonec stáhneme Gnome. Tedy:  `pacman -S gnome`
+![[6,1.gif]]
 
 
-## 6,1 Zapnutí GnomeDesktopManager
+## 6,2 Zapnutí GnomeDesktopManager
 1. Napíšeme příkaz pro zapnutí gdm/GnomeDesktopManager  `systemctl enable gdm`
-
+2. A poté restartujeme
+![[6,2.gif]]
 
 # A Máme Hotovo! 
+![[Pasted image 20230305204708.png]]
+
+## Info
+- © Jiří Edelmann | DEPSTRCZ - 2022
+- Host PC:
+	- Intel i3-8100
+	- 16Gb ram DDR4
+	- GPU: Nvidia GTX 1650SUPER
+- Návod pro instlaci programu VmWare byl dokumentován na mém notebooku protože na hlavním pc už jsem jej stáhnutý měl.
+- Čistá instlace mi zabrala: 47 Minut + Instalace Gnome 6 Minut
+- Vytvořeno v rámci úkolu na předmět OSY na škole *Vyšší odborná škola, Střední průmyslová škola a Střední odborná škola, Varnsdorf p.o.*
