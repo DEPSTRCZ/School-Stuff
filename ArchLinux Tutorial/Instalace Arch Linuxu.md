@@ -1,6 +1,6 @@
 
 # 0. Stažení iso souboru
->Tento soubor se používá k vytvoření bootovatelného média, které umožňuje instalaci operačního systému na nový počítač nebo jeho obnovu.
+>Tento soubor se používá k vytvoření bootovatelného média, které umožňuje instalaci operačního systému na nový počítač, nebo také jeho obnovu.
 
 ## 0.1 Stažení
 1. Půjdeme na stránku https://archlinux.org/download/
@@ -48,14 +48,16 @@
 
 # 2 Instalace Operačního Systému Arch Linux
 >Celý instalační proces systému Arch Linux
+>*Já jej instaluji jako co nejmenší a jen s zakl.funkcemi*
+
 ## 2.1 Tvorba "prvního/celkového oddílu"
 1. Zapneme Virtuální počítač "`Play virtual mechine`"
 2. Počkáme než se zapne a načte systém do operačního řádku
-3. Zjistíme si jméno disku na kterém budeme dělat partice = `fdisk -l` = Můj disk = `/dev/sda`
-4. Začneme proces dělaná particí *= `fdisk /dev/sda` ve většině případů `/dev/sda` může se ovšem lišit..*
-5. Napíšeme `o` pro vytvoření nového partition table
-6. Napíšeme `n` pro zvolení typu oddílu/partition
-7. Vybereme `p` pro primární typ oddílu
+3. Zjistíme si jméno disku na kterém budeme dělat partice `fdisk -l` = Můj disk = `/dev/sda`
+4. Začneme proces dělaná particí `fdisk /dev/sda`  *= ve většině případů `/dev/sda` je jméno našeho zařízení.. může se ovšem lišit..*
+5. Napíšeme `o` pro vytvoření nové tabulky oddílů
+6. Napíšeme `n` pro zvolení typu oddílu
+7. Vybereme `p` pro zvolení primárního typu oddílu
 8. Vybereme `1` u čísla oddílu (Zakl)
 9. Potvrdíme první sektor (Zakl)
 ![](2,1.gif)
@@ -67,10 +69,10 @@
 ![[2,2.gif]]
 
 ## 2,3 Nastavení oddílu jako bootable a uložení všech provedených změn
-1. Napíšeme `a` pro nastavení bootable možnost
+1. Napíšeme `a` pro nastavení bootable možnosti
 2. Napíšeme `w` pro "uložení" všech změn
 ![[2,3.gif]]
-*Můžeme podívat na změny které jsme udělal příkazem `fdisk -l`
+*Můžeme se podívat na změny které jsme udělal příkazem `fdisk -l`
 *Náš svazek se jmenuje `/dev/sda1`*
 
 ## 2,4 Nastavení LVM
@@ -79,7 +81,7 @@
 ![](2,4,1.gif)
 
 ### 2,4,2 Tvorba skupiny svazků
-1. Napíšeme  `vgcreate volumegroup0 /dev/sda1` *= `volumegroup0` jako jmeno a `/dev/sda1` jak jméno svazku*
+1. Napíšeme  `vgcreate volumegroup0 /dev/sda1` *= `volumegroup0` jako jmeno,`/dev/sda1` jako jméno svazku*
 ![](2,4,2.gif)
 
 ### 2,4,3 Tvorba logických LVM svazků
@@ -93,7 +95,7 @@
 ![[2,4,4.gif]]
 
 ### 2,4,5 Aktivace skupiny svazků
-1. Napíšeme `vgscan` tím prohledáme systém o logické skupiny aby věděl sčím pracovat
+1. Napíšeme `vgscan` tím prohledáme systém o logické skupiny aby věděl s čím pracovat
 2. Napíšeme `vgchange -ay` pro aktivaci skupin
 ![](2,4,5.gif)
 
@@ -115,7 +117,7 @@
 ## 2,7 Dotvoření rozložení diskových oddílů a uložení
 1. Vytvoříme si cestu `/mnt/etc` příkazem `mkdir /mnt/etc` *= `/mnt/etc` je naše cesta*
 2. A uložíme naše rozložení pomocí příkazu `genfstab -U -p /mnt >> /mnt/etc/fstab` a jeho output přesmerujeme do `/mnt/etc/fstab`
-3. Pomocí příkazu `cat` si ověříme zda je vše správně `cat /mnt/etc/fstab` UUID by měl být rozdílné a formát ext4
+3. Pomocí příkazu `cat` si ověříme zda je vše správně `cat /mnt/etc/fstab` UUID by měli být rozdílné a formát ext4
 ![](2,7.gif)
 
 # 3 Samotná Instalace Arch Linux
@@ -168,7 +170,7 @@
 ![](3,7,1.gif)
 
 ### 3,7,2 Tvorba uživatelského účtu
-1. Vytvoříme nového uživatele příkazem `useradd -m -g users -G wheel uzivatel` *=* `-m` vytvoří uživatelu složku, `-g users` nastaví primární skupinu na `users`, `-G wheel` přidá uživatele do skupiny `"wheel"` používané pro dávání administrátorských práv, `uzivatel` je jméno uživatele 
+1. Vytvoříme nového uživatele příkazem `useradd -m -g users -G wheel uzivatel` *= `-m` vytvoří uživatelu složku, `-g users` nastaví primární skupinu na `users`, `-G wheel` přidá uživatele do skupiny `"wheel"` používané pro dávání administrátorských práv, `uzivatel` je jméno uživatele*
 2. Nastavíme heslo od uživatele. `passwd uživatel`
 ![](3,7,2.gif)
 
@@ -186,17 +188,17 @@
 ![](4,1.gif)
 
 ## 4,2 Samotná instalace GRUB
-1. Napíšeme instalační příkaz `grub-install`. Tedy: `grub-install --target=i386-pc --recheck /dev/sda` *=`--target=i386-pc` specifikujeme architekturu, `--recheck /dev/sda` specifikujeme zařízení*
+1. Napíšeme instalační příkaz `grub-install`. Tedy: `grub-install --target=i386-pc --recheck /dev/sda` *= `--target=i386-pc` specifikujeme architekturu, `--recheck /dev/sda` specifikujeme zařízení*
 ![](4,2.gif)
 
 ## 4,3 Tvorba locale pro GRUB
-1. Ověříme si zda locale existuje pomocí příkazu `ls`   `ls -l /boot/grub` *= `/boot/grub`je cesta
-2. V listu musí být vidět `"locale"`. Pokud není tak jí vytvoříme `mkdir /boot/grub/locale`
-3. Nastavíme anglický locale pro grub / příkazem cp neboli copy zkopírujeme správný soubor z `/usr/share/locale/en\@quot/LC_MESSAGES/grub.mo` do grub složky `/boot/grub/locale/en.mo.` Tedy: `cp /usr/share/locale/en\@quot/LC_MESSAGES/grub.mo /boot/grub/locale/en.mo
+1. Ověříme si zda locale existuje pomocí příkazu `ls`   `ls -l /boot/grub` *= `/boot/grub`je cesta*
+2. V listu musí být vidět `"locale"`. Pokud není tak jí vytvoříme  příkazem `mkdir /boot/grub/locale`
+3. Nastavíme anglický locale pro grub / příkazem cp neboli copy zkopírujeme správný soubor z `/usr/share/locale/en\@quot/LC_MESSAGES/grub.mo` do grub složky `/boot/grub/locale/en.mo.` Tedy: `cp /usr/share/locale/en\@quot/LC_MESSAGES/grub.mo /boot/grub/locale/en.mo`
 ![](4,3.gif)
 
 ## 4,4 Generování GRUB konfigurace
-1. Vytvoříme GRUB konfig příkazem `grub-mkconfig -o /boot/grub/grub.cfg` *`´-mkconfig` jako makeconfig, `-o /boot/grub/grub.cfg` specifikuje cestu*
+1. Vytvoříme GRUB konfig příkazem `grub-mkconfig -o /boot/grub/grub.cfg` *= `-mkconfig` jako makeconfig,`-o /boot/grub/grub.cfg` specifikuje cestu*
 ![](4,4.gif)
 
 # 5 Dokončení Instalace Arch Linux
@@ -225,7 +227,7 @@
 
 
 # 6 Dobrovolné: Instalace Desktopového prostředí GNOME a ostatní.
->Záleží člověku a na tom k čemu bude zařízení sloužit. Existuje více prostředí ale já použiju prostředí GNOME.
+>Záleží na člověku a na tom k čemu bude zařízení sloužit. Existuje více prostředí ale já použiju prostředí GNOME.
 
 ## 6,1 Instalace duležitých balíčků
 1. Nainstalujeme balíček  `xorg-server ` který je potřebný pro chod prostředí. Tedy:  `pacman -S xorg-server `
@@ -246,9 +248,9 @@
 ## Info
 - © Jiří Edelmann | DEPSTRCZ - 2022
 - Host PC:
-	- Intel i3-8100
-	- 16Gb ram DDR4
-	- GPU: Nvidia GTX 1650SUPER
+	- `Intel i3-8100`
+	- `16Gb ram DDR4`
+	- `GPU: Nvidia GTX 1650SUPER`
 - Návod pro instlaci programu VmWare byl dokumentován na mém notebooku protože na hlavním pc už jsem jej stáhnutý měl.
 - Čistá instlace mi zabrala: 47 Minut + Instalace Gnome 6 Minut
 - Vytvořeno v rámci úkolu na předmět OSY na škole *Vyšší odborná škola, Střední průmyslová škola a Střední odborná škola, Varnsdorf p.o.*
