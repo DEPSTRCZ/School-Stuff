@@ -20,7 +20,7 @@
 1. Otevřeme stažený soubor
 2. Na další straně si přečteme podmínky
 3. Potvrdíme že jsme si přečtli licenční podmínky
-4. Projedeme instalací.. Není potřeba nic měnit všude pouze "`Next"`
+4. Projedeme instalací.. Není potřeba nic měnit všude pouze `"Next"`
 5. A dokončíme instalaci programu
 ![](1,2.gif)
 
