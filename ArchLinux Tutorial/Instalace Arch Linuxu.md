@@ -149,7 +149,7 @@
 ![](3,1.gif)
 
 ## 3,2 Vstup do instalace
-1. Pomocí příkazu `acrch-chroot /mnt` vstoupíme do instalace *= `/mnt` pro cestu*
+1. Pomocí příkazu `arch-chroot /mnt` vstoupíme do instalace *= `/mnt` pro cestu*
 
 ![](3,2.gif)
 
