@@ -105,7 +105,7 @@
 ![](2,4,3,1.gif)
 
 ### 2,4,4 Načtení naší nové skupiny svazků
-1. Napíšeme `modproble dm_mod` pro načtení našich skupin
+1. Napíšeme `modprobe dm_mod` pro načtení našich skupin
 
 ![](2,4,4.gif)
 
