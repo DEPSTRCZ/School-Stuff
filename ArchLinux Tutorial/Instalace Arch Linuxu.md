@@ -9,7 +9,7 @@
 ![](0.gif)
 
 
-# 1. Tvorba VMware virtálního prostředí!
+# 1. Tvorba VMware virtálního prostředí
 >Tvorba virtuálního prostřední / virtálního počítače ve kterém bude Arch Linux běžet
 ## 1.1 Stáhnutí programu WMware Workstation Player
 1. Půjdeme na stránku [WMware.com](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=WKST-PLAYER-1701&productId=1377&rPId=100675)
