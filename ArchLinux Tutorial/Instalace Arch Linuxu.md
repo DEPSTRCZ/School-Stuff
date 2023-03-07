@@ -206,7 +206,7 @@
 ## 3,8 Konfigurace SUDO
 1. Ujistíme se že sudo je stažené příkazem `which sudo` pokud není tak jej stáhneme `pacman -S sudo`
 2. Donutíme náš editor otevřít konfiguraci sudo. `EDITOR=nano visudo` místo nano můžete vložit jméno vašeho editoru.
-3. Najdeme řádek `# %wheel ALL=(ALL) ALL` odstraníme "`#`" a smažeme mezeru. Takto: `%%wheel ALL=(ALL) ALL` *= Umožnili jsme skupině wheel použivat sudo. Pod touto skupinou je náš uživatel*
+3. Najdeme řádek `# %wheel ALL=(ALL) ALL` odstraníme "`#`" a smažeme mezeru. Takto: `%wheel ALL=(ALL) ALL` *= Umožnili jsme skupině wheel použivat sudo. Pod touto skupinou je náš uživatel*
 4. Uložíme
 
 ![](3,8.gif)
