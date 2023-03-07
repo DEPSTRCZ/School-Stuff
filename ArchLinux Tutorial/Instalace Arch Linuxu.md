@@ -1,4 +1,5 @@
-
+# Instalace Arch Linux
+-------------
 # 0. Stažení iso souboru
 >Tento soubor se používá k vytvoření bootovatelného média, které umožňuje instalaci operačního systému na nový počítač, nebo také jeho obnovu.
 
