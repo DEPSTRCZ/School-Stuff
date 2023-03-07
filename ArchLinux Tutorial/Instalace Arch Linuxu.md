@@ -100,7 +100,7 @@
 
 ![](2,4,3,0.gif)
 
-2. Napíšeme `lvcreate -L 15B volumegroup0 /dev/sda1 -n lvhome` pro vytvoření skupiny "`lvhome`" kde se budou ukládat naše data. Zadaní velikosti můžeme pozměnit jak chceme nebo nastavit aby skupina zaplnila celý zbytek:` -l 100%FREE`= *`15B` jako velikost skupiny, `volumegroup0` jméno naší logické skupiny, `/dev/sda1` je požadovaný oddíl, `-n lvhome` jako jméno naší skupiny*
+2. Napíšeme `lvcreate -L 15GB volumegroup0 /dev/sda1 -n lvhome` pro vytvoření skupiny "`lvhome`" kde se budou ukládat naše data. Zadaní velikosti můžeme pozměnit jak chceme nebo nastavit aby skupina zaplnila celý zbytek:` -l 100%FREE`= *`15GB` jako velikost skupiny, `volumegroup0` jméno naší logické skupiny, `/dev/sda1` je požadovaný oddíl, `-n lvhome` jako jméno naší skupiny*
 
 ![](2,4,3,1.gif)
 
