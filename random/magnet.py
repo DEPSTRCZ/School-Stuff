@@ -1,26 +1,15 @@
-# magneti = ["+-",
-#            "+-",
-#            "-+",
-#            "+-",
-#            "+-",
-#            "-+"]
-magneti = ["-+",
-           "-+",
-           "+-",
-           "-+",
-           "-+",
-           "+-",
-           "-+",
-           "-+",
-           "+-",
-           "-+"]
-indexes = 0
-
-for x in range(len(magneti)-1):
-    if magneti[x] == magneti[x+1]:
-        continue
-    else:
-        indexes+=1
-    
-
-print(indexes)
+def numinput():
+    arr = []
+    howmany = int(input("How many magnets you want to input?\n"))
+    for num in range(howmany):
+        arr.append(str(input("")))
+    return arr
+def calcmagnets(array):
+    count = 0
+    for x in range(len(array)-1):
+        if array[x] == array[x+1]:
+            continue
+        else:
+            count+=1
+    return count
+print(calcmagnets(numinput()))
