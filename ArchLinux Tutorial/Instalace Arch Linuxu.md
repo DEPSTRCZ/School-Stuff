@@ -285,7 +285,7 @@
 ![.](final.png)
 
 ## Info
-- © Jiří Edelmann | DEPSTRCZ - 2022
+- © Jiří Edelmann | DEPSTRCZ - 2023
 - Host PC:
 	- `Intel i3-8100`
 	- `16Gb ram DDR4`
