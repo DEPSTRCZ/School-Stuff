@@ -130,7 +130,7 @@
 ![](2,6,0.gif)
 
 2. Napíšeme `mkdir /mnt/home/` pro vytvoření cesty kam mountneme svazek `lvhome`
-3. Napíšme `mount /dev/volumegroup0/lvhome /mnt/home` *= mountne svzek na naší vytvořenou cestu `/mnt/home`*
+3. Napíšeme `mount /dev/volumegroup0/lvhome /mnt/home` *= mountne svzek na naší vytvořenou cestu `/mnt/home`*
 
 ![](2,6,1.gif)
 
