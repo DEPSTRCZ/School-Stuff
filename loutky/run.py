@@ -5,5 +5,5 @@ for x in range(many):
     weights.append(int(input("Enter weight puppet [INT]\n")))
 
 total = sum(weights)
-result = round((total/20))
+result = round((total/maxweight))
 print(f"You will need: {result}")
