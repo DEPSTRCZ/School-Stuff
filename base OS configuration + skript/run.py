@@ -20,7 +20,8 @@ print(f"""
 ┌───────┬─────────────────────────────────────────────────────
 │ Stats │                                                
 ├───────┘                         
-│ OS: {platform.system()}                               
+│ OS: {platform.platform()}
+│ Host: {platform.node()}                       
 │ Architecture: {cpuinfo.get_cpu_info()["arch"]}                      
 │ CPU: {cpuinfo.get_cpu_info()["brand_raw"]} ({cpuinfo.get_cpu_info()["count"]}) @ {psutil.cpu_freq(percpu=False).current:.0f}
 │ GPU: {gpustr}
