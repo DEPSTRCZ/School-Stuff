@@ -24,7 +24,7 @@ class Cypher:
             tmp = self.num_of_rails-1
             print(F"AT {self.__open_text[self.__count][:self.__count+1]}")
             for char in self.__open_text[self.__count][:self.__count+1]:
-                #self.__rails[tmp].append(char)
+                self.__rails[tmp-1].append(char)
                 tmp -= 1
             self.__count += self.num_of_rails-2
             if self.__count <= self.__text_len:
@@ -45,4 +45,5 @@ class Cypher:
     def decrypt(self, cipher_text):
         pass
 
-test = Cypher(3).encrypt("GEEKS FOR GEEKS")
+#test = Cypher(3).encrypt("GEEKS FOR GEEKS")
+test = Cypher(4).encrypt("THIS IS A SECRET MESSAGE")
