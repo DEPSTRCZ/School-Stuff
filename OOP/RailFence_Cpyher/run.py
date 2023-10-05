@@ -10,8 +10,7 @@ class Cypher:
         print(self.__count)
         if down == True:
             tmp = 0
-            print(self.__open_text[self.__count:self.__count+3])
-            #print(f"{self.__open_text[:self.__count][:self.num_of_rails]} - {self.__count} - D")
+            print(self.__open_text[self.__count:self.__count+self.num_of_rails])
             for char in self.__open_text[self.__count:self.__count+self.num_of_rails]:
                 self.__rails[tmp].append(char)
                 tmp += 1
@@ -19,11 +18,10 @@ class Cypher:
             if self.__count <= self.__text_len:
                 self.__process(False)
         else:
-            #print(self.__open_text[self.__count:self.__count+1])
-            #print(f"{self.__open_text[:self.__count][:self.num_of_rails]}- {self.__count}- N")
             tmp = self.num_of_rails-1
-            print(F"AT {self.__open_text[self.__count][:self.__count+1]}")
-            for char in self.__open_text[self.__count][:self.__count+1]:
+            #print(F"AT {self.__open_text[self.__count][:self.__count+3]}")
+            print(F"AT {self.__open_text[self.__count:self.__count+(self.num_of_rails-2)]}")
+            for char in self.__open_text[self.__count:self.__count+(self.num_of_rails-2)]:
                 self.__rails[tmp-1].append(char)
                 tmp -= 1
             self.__count += self.num_of_rails-2
@@ -45,5 +43,5 @@ class Cypher:
     def decrypt(self, cipher_text):
         pass
 
-#test = Cypher(3).encrypt("GEEKS FOR GEEKS")
-test = Cypher(4).encrypt("THIS IS A SECRET MESSAGE")
+test = Cypher(3).encrypt("GEEKS FOR GEEKS")
+#est = Cypher(4).encrypt("THIS IS A SECRET MESSAGE")
