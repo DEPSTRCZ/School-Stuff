@@ -102,8 +102,9 @@ class Cypher:
             else: row -= 1      
         return result
         
+text = str(input("Zadejte text: "))
+
 print("Hlavní verze")
-print("TEXT: Tohle je tajná zpráva")
 Encrypt = Cypher(3).encrypt("Tohle je tajná zpráva")
 Decrypt = Cypher(3).decrypt(Encrypt)
 print("Zašifrovaná zpráva: ", Encrypt)
