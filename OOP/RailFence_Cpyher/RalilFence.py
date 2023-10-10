@@ -105,13 +105,13 @@ class Cypher:
 text = str(input("Zadejte text: "))
 
 print("Hlavní verze")
-Encrypt = Cypher(3).encrypt("Tohle je tajná zpráva")
+Encrypt = Cypher(3).encrypt(text)
 Decrypt = Cypher(3).decrypt(Encrypt)
 print("Zašifrovaná zpráva: ", Encrypt)
 print("Dešifrovaná zpráva: ", Decrypt)
 
 print("\nVerze 1")
-EncryptV1 = Cypher(3).encryptV1("Tohle je tajná zpráva")
+EncryptV1 = Cypher(3).encryptV1(text)
 Decrypt = Cypher(3).decrypt(EncryptV1)
 print("Zašifrovaná zpráva (V1): ", EncryptV1)
 print("Dešifrovaná zpráva: ", Decrypt)
