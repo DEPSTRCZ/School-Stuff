@@ -3,8 +3,9 @@ class Cypher:
         self.num_of_rails = amount
 
     def __transcript(self, open_text):
-        return open_text.lower().replace(" ", "")
+        return open_text.lower().replace(" ", "").replace("*", "")
     
+    # Vytvoří kolejnice, které se budou používat pro zašifrování textu. + Vyplní mezerami a hvězdičkami v patternu ZigZag
     def __create_rails(self, text):
         rails = [[ ' ' for _ in range(len(text))] for _ in range(self.num_of_rails)]
         row, col = 0, 0
@@ -22,6 +23,10 @@ class Cypher:
         return rails
 
     
+    # Verze 1
+    # Úplně první pokud/náčrt algoritmu, bez použití Googlu nebo ChatGPT na to jak to zašifrovat. 
+    # Není nejhezčí ale funguje.
+
     def __process(self, down = True,):
         if down == True:
             tmp = 0
@@ -47,54 +52,45 @@ class Cypher:
             if self.__count <= self.__text_len:
                 self.__process(True)
 
-
-            
-    def encrypt(self, open_text):
+    # Vysvětlení na řádku 25
+    def encryptV1(self, open_text):
         self.__open_text = self.__transcript(open_text)
         self.__text_len = len(self.__open_text)
         self.__rails = [[] for _ in range(self.num_of_rails)]
         self.__count = 0
         self.__process()
-        self.__cipher_text = " ".join(self.__rails)
+        self.__cipher_text = "".join([char for subarr in self.__rails for char in subarr])
         return self.__cipher_text
     
-    def encrypt2(self, open_text):
+    # Řešení o den později po trošce Googlení a přemýšlení.
+
+    def encrypt(self, open_text):
         self.__open_text = self.__transcript(open_text)
         self.__text_len = len(self.__open_text)
         self.__rails = self.__create_rails(self.__open_text)
-        self.__count = 0
-        self.__process()
-        self.__cipher_text = " ".join(self.__rails)
-        return self.__cipher_text
+
+        for col in range(self.__text_len): # X
+            for row in self.__rails: # Y
+                if row[col] == "*":
+                    row[col] = self.__open_text[col]
+        cipher_text = "".join([char for subarr in self.__rails for char in subarr if char != " "])
+        return cipher_text
 
     def decrypt(self, cipher_text):
-        arr = [[ ' ' for y in range(len(cipher_text))] for _ in range(self.num_of_rails)]
+        arr = self.__create_rails(cipher_text)
 
         down = True
         row, col = 0, 0
         tmp = 0
         result = ""
-        for _ in range(len(cipher_text)):
-            if row == 0:
-                down = True
-            if row == self.num_of_rails-1:
-                down = False
-            arr[row][col] = "*"
-            col += 1
-
-            if down:
-                row += 1
-            else:
-                row -= 1
         for row in arr:
             for pos in range(len(row)):
-                if row[pos] == "_":
+                if row[pos] == "*":
                     row[pos] = cipher_text[tmp]
                     tmp += 1
 
-
         row, col = 0, 0
-        for i in range(len(cipher_text)):
+        for _ in range(len(cipher_text)):
             if row == 0:
                 down = True
             if row == self.num_of_rails-1:
@@ -104,16 +100,18 @@ class Cypher:
                 col += 1
             if down: row += 1      
             else: row -= 1      
-        print(arr)
-        print(result)
-
-    def test(self):
-        print(self.__create_rails("GEEKSFORGEEKS"))
+        return result
         
+print("Hlavní verze")
+print("TEXT: Tohle je tajná zpráva")
+Encrypt = Cypher(3).encrypt("Tohle je tajná zpráva")
+Decrypt = Cypher(3).decrypt(Encrypt)
+print("Zašifrovaná zpráva: ", Encrypt)
+print("Dešifrovaná zpráva: ", Decrypt)
 
-#test = Cypher(3).encrypt("GEEKS FOR GEEKS")
-#test3 = Cypher(3).encrypt("GSGSEKFREKEOE")
-#test2 = Cypher(4).encrypt("THIS IS A SECRET MESSAGE")
+print("\nVerze 1")
+EncryptV1 = Cypher(3).encryptV1("Tohle je tajná zpráva")
+Decrypt = Cypher(3).decrypt(EncryptV1)
+print("Zašifrovaná zpráva (V1): ", EncryptV1)
+print("Dešifrovaná zpráva: ", Decrypt)
 
-#dec = Cypher(3).decrypt("GSGSEKFREKEOE")
-test = Cypher(3).encrypt2("GEEKS FOR GEEKS")
