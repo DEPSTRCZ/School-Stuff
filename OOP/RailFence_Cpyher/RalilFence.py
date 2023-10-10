@@ -103,16 +103,17 @@ class Cypher:
         return result
         
 text = str(input("Zadejte text: "))
+rail = int(input("Zadejte počet kolejnic: "))
 
 print("Hlavní verze")
-Encrypt = Cypher(3).encrypt(text)
-Decrypt = Cypher(3).decrypt(Encrypt)
+Encrypt = Cypher(rail).encrypt(text)
+Decrypt = Cypher(rail).decrypt(Encrypt)
 print("Zašifrovaná zpráva: ", Encrypt)
 print("Dešifrovaná zpráva: ", Decrypt)
 
 print("\nVerze 1")
-EncryptV1 = Cypher(3).encryptV1(text)
-Decrypt = Cypher(3).decrypt(EncryptV1)
+EncryptV1 = Cypher(rail).encryptV1(text)
+Decrypt = Cypher(rail).decrypt(EncryptV1)
 print("Zašifrovaná zpráva (V1): ", EncryptV1)
 print("Dešifrovaná zpráva: ", Decrypt)
 
