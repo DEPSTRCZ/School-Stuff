@@ -27,26 +27,59 @@ body {
     position: absolute;
     margin-top: 6rem;
     margin-left: 5rem;
-    border-radius:  0rem 0.2rem 0.2rem 0.2rem;
+    border-radius:  0rem 1rem 0.5rem 0.2rem;
 }
 
 .cargo-box {
-    background-color: blue;
-    width: 10rem;
+    background-color: rgb(172, 123, 64);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, #ccc 3px, #ccc 6px);
+    width: 9rem;
     height: 4rem;
     position: absolute;
     margin-top: -4rem;
     border-radius: 0.2rem 0.2rem 0rem 0rem;
     margin-left: 0rem;
+    border-color: rgb(88, 62, 30);
+    border-width: 0.1rem;
+    border-style: solid;
 }
-
-.cabin {
-    background-color: green;
-    width: 2.7rem;
-    height: 3rem;
+.cabin-window {
+    background-color: rgb(40, 158, 194);
+    width: 2.5rem;
+    height: 2.5rem;
     position: absolute;
-    margin-top: -3.9rem;
-    margin-left: 10rem;
+    margin-top: 0.1rem;
+    margin-left: 0.25rem;
+    border-radius: 0.2rem 2rem 0rem 0rem;
+
+}
+.cabin {
+    background-color: rgb(255, 0, 0);
+    width: 2.9rem;
+    height: 3.5rem;
+    position: absolute;
+    margin-top: -3.5rem;
+    margin-left: 9rem;
+    border-radius: 0.2rem 2rem 0rem 0rem;
+}
+.front-bumper {
+    background-color: rgb(99, 99, 99);
+    width: 1.2rem;
+    height: 1.2rem;
+    position: absolute;
+    margin-top: 0.8rem;
+    margin-left: 11.8rem;
+    border-radius: 0.05rem 0.05rem 0.499rem 0rem;
+}
+.headlight {
+    background-color: yellow;
+    width: 0.8rem;
+    height: 0.6rem;
+    position: absolute;
+    margin-top: -0rem;
+    margin-left: 0.4rem;
+    border-radius: 0rem 0rem 0rem 5rem;
+
 }
 .wheel1 {
     background-color: black;
