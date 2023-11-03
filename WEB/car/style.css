@@ -21,13 +21,17 @@ body {
     border-width: 0.6rem 0 0 0;
 }
 .car {
-    background-color: red;
+    background-color: rgb(196, 171, 57);
     width: 13rem;
     height: 2rem;
     position: absolute;
     margin-top: 6rem;
     margin-left: 5rem;
     border-radius:  0rem 1rem 0.5rem 0.2rem;
+    border-color: black;
+    border-width: 0.1rem;
+    border-style: solid;
+    animation: brmbrm 6s linear infinite;
 }
 
 .cargo-box {
@@ -45,31 +49,55 @@ body {
 }
 .cabin-window {
     background-color: rgb(40, 158, 194);
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.4rem;
+    height: 3.3rem;
     position: absolute;
     margin-top: 0.1rem;
-    margin-left: 0.25rem;
+    margin-left: 0.21rem;
     border-radius: 0.2rem 2rem 0rem 0rem;
+    border-color: black;
+    border-width: 0.1rem;
+    border-style: solid;
+
+
+}
+.cabin-door {
+    background-color: rgb(196, 171, 57);
+    width: 2.4rem;
+    height: 0.7rem;
+    position: absolute;
+    margin-top: 3.5rem;
+    margin-left: 0.21rem;
+    border-radius: 0rem 0rem 2rem 0.5rem;
+    border-color: black;
+    border-width: 0.1rem;
+    border-style: solid;
 
 }
 .cabin {
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(196, 171, 57);
     width: 2.9rem;
     height: 3.5rem;
     position: absolute;
-    margin-top: -3.5rem;
+    margin-top: -3.60rem;
     margin-left: 9rem;
     border-radius: 0.2rem 2rem 0rem 0rem;
+    border-color: black;
+    border-width: 0.1rem;
+    border-style: solid;
+    border-bottom: none;
 }
 .front-bumper {
     background-color: rgb(99, 99, 99);
     width: 1.2rem;
     height: 1.2rem;
     position: absolute;
-    margin-top: 0.8rem;
-    margin-left: 11.8rem;
+    margin-top: 0.7rem;
+    margin-left: 11.75rem;
     border-radius: 0.05rem 0.05rem 0.499rem 0rem;
+    border-color: black;
+    border-width: 0.1rem;
+    border-style: solid;
 }
 .headlight {
     background-color: yellow;
@@ -81,6 +109,93 @@ body {
     border-radius: 0rem 0rem 0rem 5rem;
 
 }
+.rear-bumper {
+    background-color: rgb(99, 99, 99);
+    width: 0.5rem;
+    height: 1.8rem;
+    position: absolute;
+    margin-top: 0.1rem;
+    margin-left: -0.1rem;
+    border-radius: 0.05rem 0.05rem 0rem 0.2rem;
+    border-color: black;
+    border-width: 0.1rem;
+    border-style: solid;
+}
+.rearlight {
+    background-color: rgb(255, 0, 0);
+    width: 0.2rem;
+    height: 0.6rem;
+    position: absolute;
+    margin-top: -0rem;
+    margin-left: -0rem;
+    border-radius: 0rem 0rem 0.1rem 0rem;
+}
+
+.rim1 {
+    background-color: rgb(77, 77, 77);
+    width: 1.2rem;
+    height: 0.1rem;
+    position: absolute;
+    border-color: black;
+    margin-left: 0.4rem;
+    margin-top: 0.95rem;
+
+}
+.rim2 {
+    background-color: rgb(77, 77, 77);
+    width: 1.2rem;
+    height: 0.1rem;
+    position: absolute;
+    border-color: black;
+    margin-left: 0.4rem;
+    margin-top: 0.95rem;
+    transform: rotate(30deg)
+
+}
+.rim3 {
+    background-color: rgb(77, 77, 77);
+    width: 1.2rem;
+    height: 0.1rem;
+    position: absolute;
+    border-color: black;
+    margin-left: 0.4rem;
+    margin-top: 0.95rem;
+    transform: rotate(60deg)
+
+}
+.rim4 {
+    background-color: rgb(77, 77, 77);
+    width: 1.2rem;
+    height: 0.1rem;
+    position: absolute;
+    border-color: black;
+    margin-left: 0.4rem;
+    margin-top: 0.95rem;
+    transform: rotate(90deg)
+
+}
+.rim5 {
+    background-color: rgb(77, 77, 77);
+    width: 1.2rem;
+    height: 0.1rem;
+    position: absolute;
+    border-color: black;
+    margin-left: 0.4rem;
+    margin-top: 0.95rem;
+    transform: rotate(120deg)
+
+}
+.rim6 {
+    background-color: rgb(77, 77, 77);
+    width: 1.2rem;
+    height: 0.1rem;
+    position: absolute;
+    border-color: black;
+    margin-left: 0.4rem;
+    margin-top: 0.95rem;
+    transform: rotate(150deg)
+
+}
 .wheel1 {
     background-color: black;
     width: 2rem;
@@ -89,6 +204,7 @@ body {
     margin-top: 1rem;
     border-radius: 50%;
     margin-left: 0.7rem;
+    animation: spinner 10s linear infinite;
 }
 
 .wheel2 {
@@ -99,6 +215,7 @@ body {
     margin-top: 1rem;
     border-radius: 50%;
     margin-left: 9.5rem;
+    animation: spinner 6s linear infinite;
 }
 
 @keyframes brmbrm {
@@ -107,6 +224,16 @@ body {
     }
     to{
         margin-left: 100%;
+    }
+    
+}
+
+@keyframes spinner {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
     }
     
 }
