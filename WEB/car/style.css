@@ -31,7 +31,9 @@ body {
     border-color: black;
     border-width: 0.1rem;
     border-style: solid;
-    animation: brmbrm 6s linear infinite;
+    transition: transform 0.2s ease;
+    transition-duration: 0.1s;
+    opacity: 1;
 }
 
 .cargo-box {
@@ -204,7 +206,7 @@ body {
     margin-top: 1rem;
     border-radius: 50%;
     margin-left: 0.7rem;
-    animation: spinner 10s linear infinite;
+    animation: none;
 }
 
 .wheel2 {
@@ -215,17 +217,24 @@ body {
     margin-top: 1rem;
     border-radius: 50%;
     margin-left: 9.5rem;
-    animation: spinner 6s linear infinite;
+    animation: none;
 }
 
-@keyframes brmbrm {
+@keyframes move_forward {
     from{
         margin-left: -30%;
     }
     to{
         margin-left: 100%;
     }
-    
+}
+@keyframes move_backward {
+    from{
+        margin-left: 100%;
+    }
+    to{
+        margin-left: -30%;
+    }
 }
 
 @keyframes spinner {
