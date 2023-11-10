@@ -1,0 +1,15 @@
+body {
+    display: grid;
+    grid-template-columns: 4.45rem 18.75rem 1fr;
+    grid-template-rows: 1fr;
+    min-height: 100vh;
+}
+.servers-friends {
+    background-color: #1e1f22;
+}
+.chats {
+    background-color: #2b2d31;
+}
+.view {
+    background-color: #313338;
+}
