@@ -1,0 +1,62 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #024;
+}
+h1 {
+    color: white;
+}
+header {
+    background-color: #046;
+    padding: 1rem;
+    align-items: center;
+}
+h1 small {
+    position: relative;
+    bottom: 0.7rem;
+    text-transform: uppercase;
+    font-size: 50%;
+}
+header {
+    background: linear-gradient(#012,#046);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+header svg {
+    width: 2rem;
+    height: 2rem;
+   
+}
+nav {
+    background-color: #046;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding-left: 1rem;
+}
+nav a {
+    background-color: rgb(34, 86, 113);
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+    display: inline-block;
+    
+    border-radius: 0.4rem 0.4rem 0 0;
+}
+nav a:hover {
+    padding: 0.6rem;
+
+}
+.active {
+    padding: 0.6rem;
+    background-color: #024;
+}
