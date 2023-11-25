@@ -2,44 +2,39 @@ import pygame
 import sys
 import random
 import math
-
-
-
-
-
+from PIL import Image, ImageFilter
 
 class Snowflake:
-    def __init__(self, x, y,game):
+    def __init__(self, x, y,window):
         self.x = x
         self.y = y
-        self.size = random.randint(1, 3)
-        self.wind = random.randint(-1,1)
-        self.color = random.randint(0, 2)
-        self.game = game
+        self.size = random.uniform(0.3, 1)
+        self.view = random.randint(3, 30)
+        self.blur_img = Image.open('./Snowflakes/img/snowflake-front.png').filter(ImageFilter.GaussianBlur(radius=self.view))
+        self.texture = pygame.transform.scale(pygame.image.fromstring(self.blur_img.tobytes("raw","RGBA"), self.blur_img.size, "RGBA"), (20, 20))
+        self.window = window
 
     def fall(self):
         self.y += self.size
-        if self.wind == -1:
-            self.x += math.sin(self.y/90)
-        elif self.wind == 1:
-            self.x += math.cos(self.y/90)           
-        if self.y > self.game.height:
+        self.x += math.sin(self.y/90)     
+        if self.y > self.window.height:
             self.y = 0
-            self.x = random.randint(0, self.game.width)
+            self.x = random.randint(0, self.window.width)
             self.size = random.randint(1, 3)
-            self.wind = random.randint(-1,1)
             self.color = random.randint(0, 2)
 
-    def draw(self):
-        pygame.draw.circle(self.game.screen, (random.randint(0,255),random.randint(0,255),random.randint(0,255)), (self.x, self.y), self.size)
+    def show(self):
+        self.window.screen.blit(self.texture, (self.x, self.y))
+        #pygame.draw.circle(self.window.screen, self.window.white[self.view], (self.x, self.y), self.size)
 
-class game:
+class Window:
     def __init__(self):
         pygame.init()
         self.white = ((220, 220, 220),(160,160,180),(100, 100, 120))
-        self.width = 1920
-        self.height = 1080
-        self.snowflakes_amount = 16000
+        self.width = 1270
+        self.height = 920
+        self.bg_img = pygame.transform.scale(pygame.image.load('./Snowflakes/img/forest-mountain-ridge-covered-with-snow-milky-way-starry-sky-christmas-winter-night.jpg'), (self.width, self.height))
+        self.snowflakes_amount = 300
         self.snowflakes = self.create_snow_flakes()
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Snowfall Screensaver")
@@ -59,15 +54,15 @@ class game:
                     pygame.quit()
                     sys.exit()
 
-            self.screen.fill((random.randint(0,255),random.randint(0,255),random.randint(0,255)))  
+            self.screen.blit(self.bg_img, self.bg_img.get_rect())
 
             for snowflake in self.snowflakes:
                 snowflake.fall()
-                snowflake.draw()
+                snowflake.show()
         
             pygame.display.flip()
-        #    pygame.time.Clock().tick(120)  
+            pygame.time.Clock().tick(60)
 
 
 if __name__ == "__main__":
-    game()
+    Window()

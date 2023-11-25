@@ -55,4 +55,4 @@ while True: # Main game loop
         snowflake.draw() # for each sf draw em
 
     pygame.display.flip() # cycles the screen
-    #pygame.time.Clock().tick(40)  # Time rate
+    pygame.time.Clock().tick(40)  # Time rate
