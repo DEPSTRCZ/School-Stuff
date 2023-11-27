@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /*background-image: url("https://w0.peakpx.com/wallpaper/988/562/HD-wallpaper-starry-sky-stars-dots-black.jpg");*/
+}
+    
+.sun {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: rgb(245, 163, 0);
+    box-shadow: 0 0 50px 10px #c06a02;
+    animation: rotate 10s linear infinite;
+}
+
+.mercury-container {
+
+}
+.container {
+    position: absolute;
+    margin: auto;
+}
+.planet {
+    border-radius: 50%;
+    position: absolute;
+}
+
+.mercury {
+    background-color: gray;
+    width: 1rem;
+    height: 1rem;
+}
+.orbit {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    border: 1px solid gray;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -5rem;
+    margin-left: -5rem;
+    animation: rotate 5s linear infinite;
+}
+.mercury-orbit {
+    width: 10rem;
+    height: 10rem;
+}
