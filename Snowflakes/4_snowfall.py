@@ -5,7 +5,7 @@ import math
 
 pygame.init()
 
-width, height, snowflakes_amount = 800, 600, 250
+width, height, snowflakes_amount = 800, 600, 1000
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Snowfall Screensaver")
