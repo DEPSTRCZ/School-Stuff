@@ -31,8 +31,6 @@ class Snowflake:
             self.x += math.sin(self.y/90)
         elif self.wind == 1:
             self.x += math.cos(self.y/90)
-        elif self.y > self.window.height-100:
-            self.texture = self.texture.set_alpha(127)
         if self.y > self.window.height:
             self.y = -10
             self.x = random.randint(0, self.window.width)
@@ -47,7 +45,7 @@ class Window:
         # KONFIGURACE
         # KONFIGURACE
         # KONFIGURACE
-        self.snowflakes_amount = 1000
+        self.snowflakes_amount = 2500
         self.surprise = True
         self.width = 1270
         self.height = 820
