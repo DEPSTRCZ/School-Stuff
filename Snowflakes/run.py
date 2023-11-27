@@ -3,11 +3,6 @@ import sys
 import random
 import math
 
-
-
-
-
-
 class Snowflake:
     def __init__(self, x, y,game):
         self.x = x
@@ -66,7 +61,7 @@ class game:
                 snowflake.draw()
         
             pygame.display.flip()
-        #    pygame.time.Clock().tick(120)  
+            pygame.time.Clock().tick(45)  
 
 
 if __name__ == "__main__":
