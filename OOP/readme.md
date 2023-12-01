@@ -1,5 +1,2 @@
-vstup:
-a,b
-
-
-out: rřešení lin rovnice
+# OOP
+> All OOP related scripts & programs

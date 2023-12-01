@@ -5,7 +5,6 @@ class Cypher:
     def __transcript(self, open_text):
         return open_text.lower().replace(" ", "").replace("*", "")
     
-    # Vytvoří kolejnice, které se budou používat pro zašifrování textu. + Vyplní mezerami a hvězdičkami v patternu ZigZag
     def __create_rails(self, text):
         rails = [[ ' ' for _ in range(len(text))] for _ in range(self.num_of_rails)]
         row, col = 0, 0
@@ -23,9 +22,9 @@ class Cypher:
         return rails
 
     
-    # Verze 1
-    # Úplně první pokud/náčrt algoritmu, bez použití Googlu nebo ChatGPT na to jak to zašifrovat. 
-    # Není nejhezčí ale funguje.
+    # Version 1
+    # Very first if/then algorithm sketch, without using Google or ChatGPT to encrypt it. 
+    # Not the prettiest but it works.
 
     def __process(self, down = True,):
         if down == True:
@@ -52,7 +51,7 @@ class Cypher:
             if self.__count <= self.__text_len:
                 self.__process(True)
 
-    # Vysvětlení na řádku 25
+    # Explanation on line 25
     def encryptV1(self, open_text):
         self.__open_text = self.__transcript(open_text)
         self.__text_len = len(self.__open_text)
@@ -62,7 +61,7 @@ class Cypher:
         self.__cipher_text = "".join([char for subarr in self.__rails for char in subarr])
         return self.__cipher_text
     
-    # Řešení o den později po trošce Googlení a přemýšlení.
+    # Solution a day later after a bit of Googling and thinking.
 
     def encrypt(self, open_text):
         self.__open_text = self.__transcript(open_text)
@@ -102,18 +101,18 @@ class Cypher:
             else: row -= 1      
         return result
         
-text = str(input("Zadejte text: "))
-rail = int(input("Zadejte počet kolejnic: "))
+text = str(input("Enter text: "))
+rail = int(input("Enter amount of rails: "))
 
-print("Hlavní verze")
+print("Main version")
 Encrypt = Cypher(rail).encrypt(text)
 Decrypt = Cypher(rail).decrypt(Encrypt)
-print("Zašifrovaná zpráva: ", Encrypt)
-print("Dešifrovaná zpráva: ", Decrypt)
+print("Encrypted message: ", Encrypt)
+print("DeCrypted message: ", Decrypt)
 
-print("\nVerze 1")
+print("\nVersion 1")
 EncryptV1 = Cypher(rail).encryptV1(text)
 Decrypt = Cypher(rail).decrypt(EncryptV1)
-print("Zašifrovaná zpráva (V1): ", EncryptV1)
-print("Dešifrovaná zpráva: ", Decrypt)
+print("Encrypted message (V1): ", EncryptV1)
+print("DeCrypted message: ", Decrypt)
 
