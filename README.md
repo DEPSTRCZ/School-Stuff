@@ -1,18 +1,9 @@
 # School-Things
-Everything code related from school dumped to this repo 
+> Everything code related from school dumped to this repo.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-> Dont you dare copy this...
-> Its about learning not copying
+### Contents:
+- OOP
+- InClass work
+- Homeworks
+- Experiments
+- WEB projects (Depracted)
