@@ -65,8 +65,8 @@ products = []
 
 products.append(Factory.produce(type = "Pc",name = "Babičky PC",cpu = "Zinger Chicken",ram = 16))
 products.append(Factory.produce(type = "MoNiTor",name = "Azus",diagonal_length = 125,resolution = (1280,720)))
-products.append(Factory.produce(type = "keyBOARD",name = "LogiTek",technology = "wireless"))
-products.append(Factory.produce(type = "HamsteRs",name = "Pablo",technology = "cable"))
+products.append(Factory.produce(type = "keyBOARD",name = "LuigiTukTuk",technology = "wireless"))
+products.append(Factory.produce(type = "HAMster",name = "Pablo",technology = "cable"))
 
 for product in products:
     print(product)
