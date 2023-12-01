@@ -24,7 +24,6 @@ class Snowflake:
         self.texture = pygame.image.fromstring(enhanced_img.tobytes("raw", "RGBA"), enhanced_img.size, "RGBA").convert_alpha() # Převod obrázku na pygame surface
         self.texture = pygame.transform.scale(self.texture, (self.snowflake_size, self.snowflake_size))
 
-
     def fall(self):
         self.y += self.size
         if self.wind == -1:
@@ -45,7 +44,7 @@ class Window:
         # KONFIGURACE
         # KONFIGURACE
         # KONFIGURACE
-        self.snowflakes_amount = 2500
+        self.snowflakes_amount = 1000
         self.surprise = True
         self.width = 1270
         self.height = 820
@@ -66,7 +65,6 @@ class Window:
         pygame.display.set_caption("Snowfall Screensaver")
         pygame.display.flip()
         self.game_loop() # Spuštění hry
-
 
     def create_snow_flakes(self):
             arr = []
@@ -97,7 +95,6 @@ class Window:
                 thread.join()
 
             return arr
-
     
     def game_loop(self):
         while True:
@@ -113,9 +110,7 @@ class Window:
                 snowflake.show()
         
             pygame.display.flip() # Obnovení obrazovky
-            self.clock.tick(50) # FPS
-
+            self.clock.tick(30) # FPS
 
 if __name__ == "__main__":
     Window()
-
