@@ -32,13 +32,29 @@ class monitor(Product):
     """
 
 class keyboard(Product):
-    pass
+    def __init__(self, **args):
+        super().__init__(args.get("name"))
+        self.__technology = args.get("technology")
+    
+    def __str__(self):
+        return f"""Keyboard:
+    Name: {self.name}
+    Technology: {self.__technology}
+    """
 
 class mouse(Product):
-    pass
+    def __init__(self, **args):
+        super().__init__(args.get("name"))
+        self.__technology = args.get("technology")
+    
+    def __str__(self):
+        return f"""Mouse:
+    Name: {self.name}
+    Technology: {self.__technology}
+    """
 
 class Factory:
-    product_type = ["PC","monitor","keyboard"]
+    product_type = ["pc","monitor","keyboard","mouse"]
     
     @staticmethod
     def produce(**args):
