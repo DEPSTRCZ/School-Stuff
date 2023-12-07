@@ -10,69 +10,28 @@ def calc(op,num):
             return num / op[1]
     
 
-def zero(op=None):
-    if op:
-        return calc(op,1)
-    else:
-        return 1
+def zero(op=None): return calc(op,0) if op else 0
 
-def one(op=None):
-    if op:
-        return calc(op,1)
-    else:
-        return 1
+def one(op=None): return calc(op,1) if op else 1
 
-def two(op=None):
-    if op:
-        return calc(op,2)
-    else:
-        return 2
+def two(op=None): return calc(op,2) if op else 2
 
-def three(op=None):
-    if op:
-        return calc(op,3)
-    else:
-        return 3
+def three(op=None): return calc(op,3) if op else 3
 
-def four(op=None):
-    if op:
-        return calc(op,4)
-    else:
-        return 4
+def four(op=None): return calc(op,4) if op else 4
 
-def five(op=None):
-    if op:
-        return calc(op,5)
-    else:
-        return 5
+def five(op=None): return calc(op,5) if op else 5
 
-def six(op=None):
-    if op:
-        return calc(op,6)
-    else:
-        return 6
+def six(op=None): return calc(op,6) if op else 6
 
-def seven(op=None):
-    if op:
-        return calc(op,7)
-    else:
-        return 7
+def seven(op=None): return calc(op,7) if op else 7
 
-def eight(op=None):
-    if op:
-        return calc(op,8)
-    else:
-        return 8
+def eight(op=None): return calc(op, 8) if op else 8
 
-def nine(op=None):
-    if op:
-        return calc(op,9)
-    else:
-        return 9
+def nine(op=None): return calc(op,9) if op else 9
 
 def plus(*arg):
     return ("p",arg[0])
-
 
 def minus(*arg):
     return ("m",arg[0])
