@@ -85,6 +85,5 @@ def divided_by(*arg):
 
 
 x = five(times(two()))+two(times(three()))
-x1 = five(plus(two(times(two(times(four(times(four()))))))))
 
-print(x1)
+print(x)
