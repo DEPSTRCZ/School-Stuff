@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bubbles</title>
+    <style>
+      body {
+        background: rgb(80, 100, 120);
+      }
+
+      #cnvs {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        z-index: -2;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="cnvs"></canvas>
+    <script>
+      const canvas = document.getElementById("cnvs")
+      const ctx = canvas.getContext("2d")
+
+      canvas.addEventListener("mousemove", (mouse) => console.log(mouse))
+      let mx,my; 
+      canvas.addEventListener("mousemove", (mouse) => {
+        mx = mouse.clientX, my = mouse.clientY
+      })
+      const maxRadius = 50
+      const minRadius = 10
+      const maxSpeed = 0.5
+      let dropCount = 0
+      let drops = []
+
+      class Drop {
+        constructor() {
+          this.radius = Math.random() * maxRadius + minRadius
+          this.x = Math.random() * canvas.width 
+          this.y = Math.random() * canvas.height
+          this.dx = Math.random() * maxSpeed - maxSpeed / 2
+          this.dy = Math.random() * maxSpeed - maxSpeed / 2
+          this.color = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
+        }
+        move() {
+
+          if (this.x + this.radius > canvas.width && this.dx > 0) this.dx *= -1
+          if (this.x - this.radius < 0 && this.dx < 0) this.dx *= -1
+
+          if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
+          if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
+
+          if (mx) {
+            if (this.x + this.radius == mx+50/* && this.dx > 0*/) this.dx *= -1
+            if (this.x - this.radius == mx+50/* && this.dx < 0*/) this.dx *= -1
+          }
+
+          if (my) {
+            if (this.y + this.radius == my+50/* && this.dy > 0*/) this.dy *= -1
+            if (this.y - this.radius == my+50/* && this.dy < 0*/) this.dy *= -1
+          } 
+
+          this.x += this.dx
+          this.y += this.dy 
+
+          
+        }
+        draw(ctx) {
+          ctx.beginPath()
+          ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false)
+          ctx.fillStyle = this.color
+          ctx.fill()
+          ctx.closePath()
+
+          if (mx,my) {
+            ctx.beginPath()
+            ctx.arc(mx, my, 50, 0, 2 * Math.PI, false)
+            ctx.fillStyle = `rgb(220,120,200,0.5)`
+            ctx.fill()
+            ctx.closePath()
+
+            ctx.font = "15px Arial"; // Adjust font size and family as needed
+            ctx.fillStyle = "white"; // Adjust text color as needed
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(`${Math.floor(mx+50)},${Math.floor(my+50)},${Math.floor(this.dy)}`, mx, my);
+          }
+
+
+
+          ctx.font = "15px Arial"; // Adjust font size and family as needed
+          ctx.fillStyle = "white"; // Adjust text color as needed
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(`${Math.floor(this.x+this.radius)},${Math.floor(this.y-this.radius)}| ${Math.floor(this.dx)},${Math.floor(this.dy)}`, this.x, this.y);
+        }
+      }
+      function resizeCanvas() {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        dropCount = Math.round((canvas.width * canvas.height) / 100000 )
+        drops = []
+        for (let i = 0; i < dropCount; i++) {
+          drops.push(new Drop())
+        }
+
+      }
+
+      window.onresize = resizeCanvas
+      resizeCanvas()
+
+      function animateCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        drops.forEach((drop) => drop.draw(ctx))
+        drops.forEach((drop) => drop.move())
+
+
+        requestAnimationFrame(animateCanvas)
+      }
+
+      animateCanvas()
+    </script>
+  </body>
+</html>
