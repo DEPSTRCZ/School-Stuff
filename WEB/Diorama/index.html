@@ -26,7 +26,7 @@
       const canvas = document.getElementById("cnvs")
       const ctx = canvas.getContext("2d")
 
-      canvas.addEventListener("mousemove", (mouse) => console.log(mouse))
+      //canvas.addEventListener("mousemove", (mouse) => console.log(mouse))
       let mx,my; 
       canvas.addEventListener("mousemove", (mouse) => {
         mx = mouse.clientX, my = mouse.clientY
@@ -54,6 +54,9 @@
           if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
           if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
 
+          //Math.sqrt((first.centerX - second.centerX)^2 + (first.centerY - second.centerY)^2) < first.radius + second.radius
+
+
           if (mx) {
             if (this.x + this.radius == mx+50/* && this.dx > 0*/) this.dx *= -1
             if (this.x - this.radius == mx+50/* && this.dx < 0*/) this.dx *= -1
@@ -69,6 +72,7 @@
 
           
         }
+
         draw(ctx) {
           ctx.beginPath()
           ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false)
@@ -99,9 +103,15 @@
           ctx.fillText(`${Math.floor(this.x+this.radius)},${Math.floor(this.y-this.radius)}| ${Math.floor(this.dx)},${Math.floor(this.dy)}`, this.x, this.y);
         }
       }
+      function checkCollision(ball1, ball2) {
+        // credit https://www.reddit.com/r/javascript/comments/9rqgj4/collision_detection_between_balls/
+        const distance = Math.sqrt((ball1.x - ball2.x)**2 + (ball1.y - ball2.y)**2);
+        return distance < ball1.radius + ball2.radius;
+      }
       function resizeCanvas() {
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
+        //dropCount = Math.round((canvas.width * canvas.height) / 199990 )
         dropCount = Math.round((canvas.width * canvas.height) / 100000 )
         drops = []
         for (let i = 0; i < dropCount; i++) {
@@ -116,8 +126,44 @@
       function animateCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        drops.forEach((drop) => drop.draw(ctx))
-        drops.forEach((drop) => drop.move())
+        //drops.forEach((drop) => drop.draw(ctx))
+        //drops.forEach((drop) => drop.move())
+        let c = 1;
+        //for (const drop of drops) {
+        for (let i = 0; i < drops.length-1; i++) {
+
+          //for (const drop2 of drops) {
+          for (let j = 0; j < drops.length; j++) {
+            if ( drops[i] !== drops[j] && checkCollision(drops[i], drops[j])) {
+              console.log("collision")
+              //drops[i].dx *= -1
+              //drops[i].dy *= -1
+            }
+            //else console.log("no collision")
+          }
+          drops[i].draw(ctx)
+          drops[i].move()
+        }
+        /*for (let i = 0; i < drops.length; i++) {
+          const drop = drops[i];
+          //console.log(drop)
+          
+          let j = i + 1
+
+          for (let compareIndex = i + 1; compareIndex < drops.length; compareIndex++) {
+            console.log(1)
+            const drop2 = drops[j];
+            console.log(drop, drop2)
+            if (checkCollision(drop, drop2)) {
+                console.log("collision between", i, "and", compareIndex);
+            } else {
+                console.log("no collision");
+            }
+          }
+          drop.draw(ctx)
+          drop.move()
+        }*/
+      
 
 
         requestAnimationFrame(animateCanvas)
