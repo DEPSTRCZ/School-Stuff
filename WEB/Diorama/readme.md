@@ -6,7 +6,7 @@
 
 Sketch book:
 - Místo kde jsem zkoumal jak fungují matematické záležitosti
-- Obrázek [[https://github.com/DEPSTRCZ/School-Stuff/blob/main/WEB/Diorama/sketch.png]]
+- Obrázek [[https://raw.githubusercontent.com/DEPSTRCZ/School-Stuff/main/WEB/Diorama/sketch.png]]
 
 Poznámky:
 - Původně byly i kolize mezi koulemi, ale byly odstraněny kvůli komplexnosti matiky která mi znovna dvakrát nejde (old_index.html)
