@@ -6,11 +6,11 @@
 
 Sketch book:
 - Místo kde jsem zkoumal jak fungují matematické záležitosti
-- Obrázek [[https://raw.githubusercontent.com/DEPSTRCZ/School-Stuff/main/WEB/Diorama/sketch.png|alt=sketch]]
+- Obrázek ![sketch.png](https://raw.githubusercontent.com/DEPSTRCZ/School-Stuff/main/WEB/Diorama/sketch.png)
 
 Poznámky:
 - Původně byly i kolize mezi koulemi, ale byly odstraněny kvůli komplexnosti matiky která mi znovna dvakrát nejde (old_index.html)
-- Insipirace šla z mého pozadí na mém webu (https://depstr.eu)
+- Insipirace šla z mého pozadí na mém [Webu](https://depstr.eu)
 
 Poznatky:
 - Tahat věci z DOM při každém cyklu je nebezpečné :D Mít méně ramek tak je po mě :x 
