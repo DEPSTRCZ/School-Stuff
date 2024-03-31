@@ -27,26 +27,31 @@
         background: rgba(0,0,0,0.5);
         z-index: 100;
       }
+    .reversed-slider {
+        direction: rtl;
+    }
     </style>
   </head>
   <body>
     <canvas id="cnvs"></canvas>
     <div class="settings-card">
         <h1>Settings</h1>
+        
         <label for="lines">Lines</label>
         <input type="checkbox" id="lines" name="lines" value="lines">
         <label for="color">Color</label>
-        <input type="color" id="color" name="color" value="#ff0000">
-        <label for="speed">Speed</label>
-        <input type="range" id="speed" name="speed" min="0" max="10" value="5">
+        <input type="color" id="color" name="color" value="#3a9a86">
         <label for="lt">LineThickness</label>
         <input type="range" id="lt" name="lt" min="0" max="10" value="5">
+        <label for="amount">Amount</label>
+        <input type="range" id="amount" min="500" max="10000" value="900" class="reversed-slider">
+
     </div>
     <script>
         const canvas = document.getElementById("cnvs")
         const ctx = canvas.getContext("2d")
         let cursor = {x: 0, y: 0, radius: 50}
-        let color = "#ff0000"
+        let color = "#3a9a86"
 
         const maxRadius = 50
         const minRadius = 10
@@ -57,7 +62,7 @@
         let LineThickness = 0
         let lines = false
 
-        let dropCount = 0
+        let dropsCount = 900
         let drops = []
 
         canvas.addEventListener("mousemove", (mouse) => {
@@ -73,11 +78,16 @@
             color = e.target.value
             resizeCanvas()
         })
+        document.getElementById("amount").addEventListener("change", (e) => {
+            dropsCount = e.target.value
+            resizeCanvas()
+        })
 
         function createRandomShade(hexColor) {
             const [r, g, b] = hexColor.match(/\w{2}/g).map(hex => parseInt(hex, 16));
+            // Split hex into sectors by 2 chars and convert to decimal r, g, b
 
-            const baseBrightnessFactor = Math.random() * 0.6 - 0.3; // Small base adjustment
+            const baseBrightnessFactor = Math.random() * 0.9 - 0.3;
 
             // Generate slight variation for each instance
             const instanceVariation = Math.random() * 0.05 - 0.025;
@@ -85,9 +95,9 @@
             const adjustedR = Math.round(Math.max(0, Math.min(255, r + (r * (baseBrightnessFactor + instanceVariation)))));
             const adjustedG = Math.round(Math.max(0, Math.min(255, g + (g * (baseBrightnessFactor + instanceVariation)))));
             const adjustedB = Math.round(Math.max(0, Math.min(255, b + (b * (baseBrightnessFactor + instanceVariation)))));
-
+            console.log(adjustedR, adjustedG, adjustedB)
             const shadeHex = `#${adjustedR.toString(16).padStart(2, '0')}${adjustedG.toString(16).padStart(2, '0')}${adjustedB.toString(16).padStart(2, '0')}`;
-
+            console.log(shadeHex)
             return shadeHex;
         }
 
@@ -119,27 +129,11 @@
                 ctx.fill()
                 ctx.closePath()
 
-
-
                 if (cursor.x && cursor.y) {
                     ctx.beginPath()
                     ctx.arc(cursor.x, cursor.y, cursor.radius, 0, 2 * Math.PI, false)
-                    ctx.fillStyle = `rgb(220,120,200,0.009)`
-                    ctx.fill()
                     ctx.closePath()
-
-                    ctx.font = "15px Arial"; // Adjust font size and family as needed
-                    ctx.fillStyle = "white"; // Adjust text color as needed
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
                 }
-
-
-
-                ctx.font = "15px Arial"; // Adjust font size and family as needed
-                ctx.fillStyle = "white"; // Adjust text color as needed
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
             }
             drawLine(ctx) {
                 ctx.beginPath()
@@ -165,7 +159,7 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth
             canvas.height = window.innerHeight
-            dropCount = Math.round((canvas.width * canvas.height) / 10000 )
+            dropCount = Math.round((canvas.width * canvas.height) / dropsCount )
             drops = []
             for (let i = 0; i < dropCount; i++) {
             drops.push(new Drop())
@@ -187,7 +181,7 @@
                     const rSum = cursor.radius + ball.radius;
                     const ratio = rSum / (rSum - collision[1]); // (poměr zvětšení) nevím překald lol
                     const target_deltax = ratio * (ball.x - cursor.x); // násobíme poměrem velikosti  na cil x
-                     const target_deltay = ratio * (ball.y - cursor.y); // násobíme poměrem velikosti  na cil y
+                    const target_deltay = ratio * (ball.y - cursor.y); // násobíme poměrem velikosti  na cil y
                     ball.x = target_deltax + cursor.x;
                     ball.y = target_deltay + cursor.y;
 
