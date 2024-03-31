@@ -1,3 +1,35 @@
+<!--Diorama 
+Čas strávený:
+- Koukání okolo, zkoušení, nápady 2days
+- Aktivní čas: 10hours
+- Velké díky patří [Matyáš Mikuš](https://github.com/Mleekush) (Karolína Světlá) za vysvětlení matematických výpočtů a rovnic 
+
+Sketch book:
+- Místo kde jsem zkoumal jak fungují matematické záležitosti
+- Obrázek (sketch.png)
+
+Poznámky:
+- Původně byly i kolize mezi koulemi, ale byly odstraněny kvůli komplexnosti matiky která mi znovna dvakrát nejde (old_index.html)
+- Insipirace šla z mého pozadí na mém webu (https://depstr.eu)
+
+Poznatky:
+- Tahat věci z DOM při každém cyklu je nebezpečné :D Mít méně ramek tak je po mě :x 
+- Určitě si to časově rozvrhnout a nedělat to pár hodin před deadlinem
+- Matika je těžká... 
+
+Zdroje:
+Slouželi pro vysvětlení a inspiraci, některé části byly převzaty a upraveny (CheckCOlisions)
+- https://codepen.io/ztyler/pen/LergVR
+- https://www.reddit.com/r/javascript/comments/9rqgj4/collision_detection_between_balls/
+- https://bytesnbits.co.uk/bounding-ball-collision-detection-game-coding-tutorial/
+- https://www.w3schools.com/tags/canvas_arc.asp
+
+- https://www.youtube.com/watch?v=Hesgc79s7YQ
+
+- Základní kód z Teams chatu  (Ing. Bc. Michal BUBÍLEK)
+
+
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,30 +37,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bubbles</title>
     <style>
-      body {
-        background: rgb(80, 100, 120);
-      }
+        body {
+            background: rgb(80, 100, 120);
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
 
-      #cnvs {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        z-index: -2;
-      }
-      .settings-card {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 15vw;
-        height: 10vh;
-        background: rgba(0,0,0,0.5);
-        z-index: 100;
-      }
+        #cnvs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -2;
+        }
+        .settings-card {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
     .reversed-slider {
         direction: rtl;
+    }
+    h1 {
+        color: white;
+        text-align: center;
+    }
+    label {
+        color: white;
+        display: block;
+        margin-bottom: 5px;
     }
     </style>
   </head>
@@ -44,7 +84,7 @@
         <label for="lt">LineThickness</label>
         <input type="range" id="lt" name="lt" min="0" max="10" value="5">
         <label for="amount">Amount</label>
-        <input type="range" id="amount" min="500" max="10000" value="900" class="reversed-slider">
+        <input type="range" id="amount" min="500" max="5000" value="1200" class="reversed-slider">
 
     </div>
     <script>
@@ -62,7 +102,7 @@
         let LineThickness = 0
         let lines = false
 
-        let dropsCount = 900
+        let dropsCount = 1200
         let drops = []
 
         canvas.addEventListener("mousemove", (mouse) => {
@@ -118,6 +158,33 @@
                 if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
                 if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
 
+                const collision = checkCollision(this)
+
+                if (collision[0]) {
+                    const rSum = cursor.radius + this.radius;
+                    const ratio = rSum / (rSum - collision[1]); // (poměr zvětšení) nevím překald lol
+                    const target_deltax = ratio * (this.x - cursor.x); // násobíme poměrem velikosti  na cil x
+                    const target_deltay = ratio * (this.y - cursor.y); // násobíme poměrem velikosti  na cil y
+                    this.x = target_deltax + cursor.x;
+                    this.y = target_deltay + cursor.y;
+
+                    if (target_deltax > 0 && this.dx < 0) this.dx *= -1;
+                    if (target_deltax < 0 && this.dx > 0) this.dx *= -1;
+
+                    if (maxBounceSpeed > Math.abs(this.dx) || maxBounceSpeed > Math.abs(this.dy)) {
+                        this.dx *= 1.2;
+                        this.dy *= 1.2;
+                    };
+                } else {
+                    if (maxSpeed < Math.abs(this.dx) || maxSpeed < Math.abs(this.dy)) {
+                        this.dx *= 0.99;
+                        this.dy *= 0.99;
+                    };
+                }
+
+
+
+
                 this.x += this.dx
                 this.y += this.dy
             }
@@ -135,17 +202,9 @@
                     ctx.closePath()
                 }
             }
-            drawLine(ctx) {
-                ctx.beginPath()
-                ctx.moveTo(this.x, this.y)
-                ctx.lineTo(cursor.x, cursor.y)
-                ctx.strokeStyle = "white"
-                ctx.stroke()
-                ctx.closePath()
-            }
         }
 
-        // Explain: (URL)
+
         //modifed & borrowed from: https://codepen.io/ztyler/pen/LergVR
         function checkCollision(ball) {
             const rSum = cursor.radius + ball.radius;
@@ -174,37 +233,14 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
             for (let i = 0; i < drops.length-1; i++) {
-                const ball = drops[i];
-                const collision = checkCollision(ball)
-
-                if (collision[0]) {
-                    const rSum = cursor.radius + ball.radius;
-                    const ratio = rSum / (rSum - collision[1]); // (poměr zvětšení) nevím překald lol
-                    const target_deltax = ratio * (ball.x - cursor.x); // násobíme poměrem velikosti  na cil x
-                    const target_deltay = ratio * (ball.y - cursor.y); // násobíme poměrem velikosti  na cil y
-                    ball.x = target_deltax + cursor.x;
-                    ball.y = target_deltay + cursor.y;
-
-                    if (target_deltax > 0 && ball.dx < 0) ball.dx *= -1;
-                    if (target_deltax < 0 && ball.dx > 0) ball.dx *= -1;
-
-                    if (maxBounceSpeed > Math.abs(ball.dx) || maxBounceSpeed > Math.abs(ball.dy)) {
-                        ball.dx *= 1.2;
-                        ball.dy *= 1.2;
-                    };
-                } else {
-                    if (maxSpeed < Math.abs(ball.dx) || maxSpeed < Math.abs(ball.dy)) {
-                        ball.dx *= 0.99;
-                        ball.dy *= 0.99;
-                    };
-                }
-
+                const ball1 = drops[i];
+                
                 if (lines) {
                     for (let j = i+1; j < drops.length; j++) {
                         const ball2 = drops[j];
-                        if (Math.abs(ball.x-ball2.x) < LineDistance && Math.abs(ball.y-ball2.y) < LineDistance) {
+                        if (Math.abs(ball1.x-ball2.x) < LineDistance && Math.abs(ball1.y-ball2.y) < LineDistance) {
                             ctx.beginPath()
-                            ctx.moveTo(ball.x, ball.y)
+                            ctx.moveTo(ball1.x, ball1.y)
                             ctx.lineTo(ball2.x, ball2.y)
                             ctx.strokeStyle = "white"
                             ctx.lineWidth = LineThickness
@@ -214,9 +250,8 @@
                         }
                     }
                 }
-
-                drops[i].draw(ctx)
-                drops[i].move()
+                ball1.draw(ctx)
+                ball1.move()
             }
             requestAnimationFrame(animateCanvas)
         }
