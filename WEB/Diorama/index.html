@@ -18,29 +18,45 @@
         overflow: hidden;
         z-index: -2;
       }
+      .settings-card {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 15vw;
+        height: 10vh;
+        background: rgba(0,0,0,0.5);
+        z-index: 100;
+      }
     </style>
   </head>
   <body>
     <canvas id="cnvs"></canvas>
+    <div class="settings-card">
+        <h1>Settings</h1>
+        <label for="lines">Lines</label>
+        <input type="checkbox" id="lines" name="lines" value="lines">
+        <label for="color">Color</label>
+        <input type="color" id="color" name="color" value="#ff0000">
+        <label for="speed">Speed</label>
+        <input type="range" id="speed" name="speed" min="0" max="10" value="5">
+        <label for="lt">LineThickness</label>
+        <input type="range" id="lt" name="lt" min="0" max="10" value="5">
+    </div>
     <script>
         const canvas = document.getElementById("cnvs")
         const ctx = canvas.getContext("2d")
-        let mouseDown = false;
         let cursor = {x: 0, y: 0, radius: 50}
 
         const maxRadius = 50
         const minRadius = 10
         const maxBounceSpeed = 5.5
         const maxSpeed = 0.5
+
+        const LineDistance = Math.min(canvas.width, canvas.height) * 0.8
+
         let dropCount = 0
         let drops = []
 
-        canvas.addEventListener('mousedown',function(event) {
-	        mouseDown = true;
-        });
-        canvas.addEventListener('mouseup', function(event) {
-            mouseDown = false;
-        });
         canvas.addEventListener("mousemove", (mouse) => {
             cursor.x = mouse.clientX, cursor.y = mouse.clientY
         })
@@ -53,8 +69,6 @@
                 this.dx = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
                 this.dy = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
                 this.color = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
-                this.coliding = false
-                this.last_center_distance = 0
             }
             move() {
 
@@ -110,26 +124,32 @@
                 ctx.fillStyle = "white"; // Adjust text color as needed
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
-                ctx.fillText(`${Math.floor(this.x+this.radius)},${Math.floor(this.y-this.radius)}| ${Math.floor(this.dx)},${Math.floor(this.dy)} - ${this.coliding}`, this.x, this.y);
+            }
+            drawLine(ctx) {
+                ctx.beginPath()
+                ctx.moveTo(this.x, this.y)
+                ctx.lineTo(cursor.x, cursor.y)
+                ctx.strokeStyle = "white"
+                ctx.stroke()
+                ctx.closePath()
             }
         }
-        /*function checkCollision(ball) {
-            // credit https://www.reddit.com/r/javascript/comments/9rqgj4/collision_detection_between_balls/, https://bytesnbits.co.uk/bounding-ball-collision-detection-game-coding-tutorial/
 
-            const d_sqr = (cursor.x - ball.x) ** 2 + (cursor.y - ball.y) ** 2;
-            const r_sqr = (cursor.radius + ball.radius) ** 2;
-            return d_sqr <= r_sqr;
-        }*/
+        // Explain: (URL)
+        //modifed & borrowed from: https://codepen.io/ztyler/pen/LergVR
         function checkCollision(ball) {
             const rSum = cursor.radius + ball.radius;
-            const dx = ball.x - cursor.x;
-            const dy = ball.y - cursor.y;
-            return [rSum * rSum > dx * dx + dy * dy, rSum - Math.sqrt(dx * dx + dy * dy)];
+            const deltax = ball.x - cursor.x;
+            const deltay = ball.y - cursor.y;
+            //            pythag
+            const colided = rSum * rSum > deltax * deltax + deltay * deltay; // avoid calc square root when no colision
+            if (!colided) return [false, 0];
+            return [colided, rSum - Math.sqrt(deltax * deltax + deltay * deltay)];
         }
         function resizeCanvas() {
             canvas.width = window.innerWidth
             canvas.height = window.innerHeight
-            dropCount = 190//Math.round((canvas.width * canvas.height) / 100000 )
+            dropCount = Math.round((canvas.width * canvas.height) / 10000 )
             drops = []
             for (let i = 0; i < dropCount; i++) {
             drops.push(new Drop())
@@ -143,89 +163,52 @@
         function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-            let c = 1;
-            //for (const drop of drops) {
             for (let i = 0; i < drops.length-1; i++) {
                 const ball = drops[i];
-                //console.log(drop)
                 const collision = checkCollision(ball)
+
                 if (collision[0]) {
-                    const rSum = cursor.radius + ball.radius
-                    const ratio = rSum / (rSum - collision[1])
-                    const target_deltax = ratio * (ball.x - cursor.x)
-                    const target_deltay = ratio * (ball.y - cursor.y)
-                    console.log(ratio, target_deltax, target_deltay, rSum,collision[1])
-                    //console.log("collision",ball.last_center_distance, collision[1])
-                    ball.x = target_deltax + cursor.x
-                    ball.y = target_deltay + cursor.y
+                    const rSum = cursor.radius + ball.radius;
+                    const ratio = rSum / (rSum - collision[1]); // (poměr zvětšení) nevím překald lol
+                    const target_deltax = ratio * (ball.x - cursor.x); // násobíme poměrem velikosti  na cil x
+                     const target_deltay = ratio * (ball.y - cursor.y); // násobíme poměrem velikosti  na cil y
+                    ball.x = target_deltax + cursor.x;
+                    ball.y = target_deltay + cursor.y;
 
-                    if (target_deltax > 0 && ball.dx < 0) ball.dx *= -1
-                    if (target_deltax < 0 && ball.dx > 0) ball.dx *= -1
+                    if (target_deltax > 0 && ball.dx < 0) ball.dx *= -1;
+                    if (target_deltax < 0 && ball.dx > 0) ball.dx *= -1;
+
                     if (maxBounceSpeed > Math.abs(ball.dx) || maxBounceSpeed > Math.abs(ball.dy)) {
-                                ball.dx *= 1.2;
-                                ball.dy *= 1.2;
-                            }
-
-
-
-
-
-                    
-                    /*if (collision[1] >= ball.last_center_distance) {
-                            console.log("flip")
-                            if (maxBounceSpeed > Math.abs(ball.dx) || maxBounceSpeed > Math.abs(ball.dy)) {
-                                ball.dx *= 1.2;
-                                ball.dy *= 1.2;
-                            }
-                            ball.dx *= -1
-                            ball.dy *= -1
-                            
-                            
-                        }*/
-                    if (!ball.coliding) {
- 
-                        ball.coliding = true
-                        
-                    }
-                    ball.last_center_distance = collision[1]
+                        ball.dx *= 1.2;
+                        ball.dy *= 1.2;
+                    };
                 } else {
                     if (maxSpeed < Math.abs(ball.dx) || maxSpeed < Math.abs(ball.dy)) {
-                                ball.dx *= 0.99;
-                                ball.dy *= 0.99;
-                            }
-                    ball.coliding = false
+                        ball.dx *= 0.99;
+                        ball.dy *= 0.99;
+                    };
                 }
 
-                for (let j = 0; j < drops.length; j++) {
-                    
-                
-                    //else console.log("no collision")
+                if (document.getElementById("lines").checked) {
+                    for (let j = i+1; j < drops.length; j++) {
+                        const ball2 = drops[j];
+                        console.log(document.getElementById("lt").value)
+                        if (Math.abs(ball.x-ball2.x) < LineDistance && Math.abs(ball.y-ball2.y) < LineDistance) {
+                            ctx.beginPath()
+                            ctx.moveTo(ball.x, ball.y)
+                            ctx.lineTo(ball2.x, ball2.y)
+                            ctx.strokeStyle = "white"
+                            ctx.lineWidth = document.getElementById("lt").value
+                            ctx.stroke()
+                            ctx.closePath()
+
+                        }
+                    }
                 }
+
                 drops[i].draw(ctx)
                 drops[i].move()
             }
-            /*for (let i = 0; i < drops.length; i++) {
-            const drop = drops[i];
-            //console.log(drop)
-            
-            let j = i + 1
-
-            for (let compareIndex = i + 1; compareIndex < drops.length; compareIndex++) {
-                console.log(1)
-                const drop2 = drops[j];
-                console.log(drop, drop2)
-                if (checkCollision(drop, drop2)) {
-                    console.log("collision between", i, "and", compareIndex);
-                } else {
-                    console.log("no collision");
-                }
-            }
-            drop.draw(ctx)
-            drop.move()
-            }*/
-        
-
-
             requestAnimationFrame(animateCanvas)
         }
 
