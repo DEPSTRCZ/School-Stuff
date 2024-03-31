@@ -23,105 +23,105 @@
   <body>
     <canvas id="cnvs"></canvas>
     <script>
-      const canvas = document.getElementById("cnvs")
-      const ctx = canvas.getContext("2d")
+        const canvas = document.getElementById("cnvs")
+        const ctx = canvas.getContext("2d")
+        let mouseDown = false;
+        let cursor = {x: 0, y: 0, radius: 50}
 
-      //canvas.addEventListener("mousemove", (mouse) => console.log(mouse))
-      let mx,my; 
-      canvas.addEventListener("mousemove", (mouse) => {
-        mx = mouse.clientX, my = mouse.clientY
-      })
-      const maxRadius = 50
-      const minRadius = 10
-      const maxSpeed = 0.5
-      let dropCount = 0
-      let drops = []
+        const maxRadius = 50
+        const minRadius = 10
+        const maxSpeed = 0.5
+        let dropCount = 0
+        let drops = []
 
-      class Drop {
-        constructor() {
-          this.radius = Math.random() * maxRadius + minRadius
-          this.x = Math.random() * canvas.width 
-          this.y = Math.random() * canvas.height
-          this.dx = Math.random() * maxSpeed - maxSpeed / 2
-          this.dy = Math.random() * maxSpeed - maxSpeed / 2
-          this.color = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
-        }
-        move() {
+        canvas.addEventListener('mousedown',function(event) {
+	        mouseDown = true;
+        });
+        canvas.addEventListener('mouseup', function(event) {
+            mouseDown = false;
+        });
+        canvas.addEventListener("mousemove", (mouse) => {
+            cursor.x = mouse.clientX, cursor.y = mouse.clientY
+        })
 
-          if (this.x + this.radius > canvas.width && this.dx > 0) this.dx *= -1
-          if (this.x - this.radius < 0 && this.dx < 0) this.dx *= -1
+        class Drop {
+            constructor() {
+                this.radius = Math.random() * maxRadius + minRadius
+                this.x = Math.random() * canvas.width 
+                this.y = Math.random() * canvas.height
+                this.dx = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
+                this.dy = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
+                this.color = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
+                this.coliding = false
+            }
+            move() {
 
-          if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
-          if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
+                if (this.x + this.radius > canvas.width && this.dx > 0) this.dx *= -1
+                if (this.x - this.radius < 0 && this.dx < 0) this.dx *= -1
 
-
-          //if (mx) {
-          //  if (this.x + this.radius == mx+50/* && this.dx > 0*/) this.dx *= -1
-          //  if (this.x - this.radius == mx+50/* && this.dx < 0*/) this.dx *= -1
-          //}
-
-          //if (my) {
-          //  if (this.y + this.radius == my+50/* && this.dy > 0*/) this.dy *= -1
-          //  if (this.y - this.radius == my+50/* && this.dy < 0*/) this.dy *= -1
-          //} 
-
-          this.x += this.dx
-          this.y += this.dy 
-
-          
-        }
-
-        draw(ctx) {
-          ctx.beginPath()
-          ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false)
-          ctx.fillStyle = this.color
-          ctx.fill()
-          ctx.closePath()
-
-          if (mx,my) {
-            ctx.beginPath()
-            ctx.arc(mx, my, 50, 0, 2 * Math.PI, false)
-            ctx.fillStyle = `rgb(220,120,200,0.5)`
-            ctx.fill()
-            ctx.closePath()
-
-            ctx.font = "15px Arial"; // Adjust font size and family as needed
-            ctx.fillStyle = "white"; // Adjust text color as needed
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(`${Math.floor(mx+50)},${Math.floor(my+50)},${Math.floor(this.dy)}`, mx, my);
-          }
+                if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
+                if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
 
 
 
-          ctx.font = "15px Arial"; // Adjust font size and family as needed
-          ctx.fillStyle = "white"; // Adjust text color as needed
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(`${Math.floor(this.x+this.radius)},${Math.floor(this.y-this.radius)}| ${Math.floor(this.dx)},${Math.floor(this.dy)}`, this.x, this.y);
-        }
+                /*if (checkCollision(this)) {
+                    console.log("colide")
+                    if (!this.coliding) {
+                        this.coliding = true
+                        this.dx *= -1;
+                        this.dy *= -1;
+                    }
+
+                }*/
+                this.x += this.dx
+                this.y += this.dy
+
+                
+            }
+
+            draw(ctx) {
+                ctx.beginPath()
+                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false)
+                ctx.fillStyle = this.color
+                ctx.fill()
+                ctx.closePath()
+
+
+
+                if (cursor.x && cursor.y) {
+                    ctx.beginPath()
+                    ctx.arc(cursor.x, cursor.y, cursor.radius, 0, 2 * Math.PI, false)
+                    ctx.fillStyle = `rgb(220,120,200,0.5)`
+                    ctx.fill()
+                    ctx.closePath()
+
+                    ctx.font = "15px Arial"; // Adjust font size and family as needed
+                    ctx.fillStyle = "white"; // Adjust text color as needed
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(`${Math.floor(cursor.x+50)},${Math.floor(cursor.y+50)},${Math.floor(this.dy)}`, cursor.x, cursor.y);
+                }
+
+
+
+                ctx.font = "15px Arial"; // Adjust font size and family as needed
+                ctx.fillStyle = "white"; // Adjust text color as needed
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(`${Math.floor(this.x+this.radius)},${Math.floor(this.y-this.radius)}| ${Math.floor(this.dx)},${Math.floor(this.dy)} - ${this.coliding}`, this.x, this.y);
+            }
       }
-      
-      /*function checkCollision(ball1, ball2) {
+      function checkCollision(ball) {
         // credit https://www.reddit.com/r/javascript/comments/9rqgj4/collision_detection_between_balls/, https://bytesnbits.co.uk/bounding-ball-collision-detection-game-coding-tutorial/
 
-        const d_sqr = (ball1.x - ball2.x) ** 2 + (ball1.y - ball2.y) ** 2;
-        const r_sqr = (ball1.radius + ball2.radius) ** 2;
+        const d_sqr = (cursor.x - ball.x) ** 2 + (cursor.y - ball.y) ** 2;
+        const r_sqr = (cursor.radius + ball.radius) ** 2;
         return d_sqr <= r_sqr;
-      }*/
-
-      function checkCollision(ballA, ballB) {
-        const rSum = ballA.radius + ballB.radius;
-        const dx = ballB.x - ballA.x;
-        const dy = ballB.y - ballA.y;
-        return [rSum * rSum > dx * dx + dy * dy, rSum - Math.sqrt(dx * dx + dy * dy)];
-    }
-    
-
+      }
       function resizeCanvas() {
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
-        dropCount = 50//Math.round((canvas.width * canvas.height) / 100000 )
+        dropCount = 19//Math.round((canvas.width * canvas.height) / 100000 )
         drops = []
         for (let i = 0; i < dropCount; i++) {
           drops.push(new Drop())
@@ -138,41 +138,26 @@
         let c = 1;
         //for (const drop of drops) {
         for (let i = 0; i < drops.length-1; i++) {
+            const ball = drops[i];
+            //console.log(drop)
+            if (checkCollision(ball)) {
+                if (!ball.coliding) {
+                    ball.dx *= -1
+                    ball.dy *= -1
+                    ball.coliding = true
+                }
+            } else {
+                ball.coliding = false
+            }
 
           //for (const drop2 of drops) {
-          for (let j = i+1; j < drops.length; j++) {
-            const collision = checkCollision(drops[i], drops[j]);
-            if ( drops[i] !== drops[j] && collision[0]) {
-              console.log("collision")
-              const ball1 = drops[i];
-              const ball2 = drops[j];
-              /*drops[i].dx *= -1
-              drops[i].dy *= -1
-              drops[j].dx *= -1
-              drops[j].dy *= -1*/
-              const deltaX = ball1.x - ball2.x
-              const deltaY = ball1.y - ball2.y
-              const impactAngle = Math.atan2(deltaY, deltaX);
-
-        // Calculate new velocities for each ball based on impact angle and original velocities
-              const tempDx1 = ball1.dx,
-                    tempDy1 = ball1.dy,
-                    tempDx2 = ball2.dx,
-                    tempDy2 = ball2.dy;
-              if (collision[1] > 0) {
-                ball1.x += collision[1] * Math.cos(impactAngle)
-                ball1.y += collision[1] * Math.sin(impactAngle)
-                ball2.x -= collision[1] * Math.cos(impactAngle)
-                ball2.y -= collision[1] * Math.sin(impactAngle)
-              } else {
-                ball1.dx = ball2.dx * Math.cos(impactAngle) +  ball2.dy * Math.sin(impactAngle);
-                ball1.dy =  ball2.dy * Math.cos(impactAngle) - ball2.dx * Math.sin(impactAngle);
-
-                ball2.dx = tempDx1 * Math.cos(impactAngle) + tempDy1 * Math.sin(impactAngle);
-                ball2.dy = tempDy1 * Math.cos(impactAngle) - tempDx1 * Math.sin(impactAngle);
-                console.log(collision[1],ball1.dx, ball1.dy, ball2.dx, ball2.dy)
-              }
+          for (let j = 0; j < drops.length; j++) {
+            if (checkCollision(drops[i])) {
+              //console.log("collision")
+              //drops[i].dx *= -1
+              //drops[i].dy *= -1
             }
+            //else console.log("no collision")
           }
           drops[i].draw(ctx)
           drops[i].move()
