@@ -54,18 +54,16 @@
           if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
           if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
 
-          //Math.sqrt((first.centerX - second.centerX)^2 + (first.centerY - second.centerY)^2) < first.radius + second.radius
 
+          //if (mx) {
+          //  if (this.x + this.radius == mx+50/* && this.dx > 0*/) this.dx *= -1
+          //  if (this.x - this.radius == mx+50/* && this.dx < 0*/) this.dx *= -1
+          //}
 
-          if (mx) {
-            if (this.x + this.radius == mx+50/* && this.dx > 0*/) this.dx *= -1
-            if (this.x - this.radius == mx+50/* && this.dx < 0*/) this.dx *= -1
-          }
-
-          if (my) {
-            if (this.y + this.radius == my+50/* && this.dy > 0*/) this.dy *= -1
-            if (this.y - this.radius == my+50/* && this.dy < 0*/) this.dy *= -1
-          } 
+          //if (my) {
+          //  if (this.y + this.radius == my+50/* && this.dy > 0*/) this.dy *= -1
+          //  if (this.y - this.radius == my+50/* && this.dy < 0*/) this.dy *= -1
+          //} 
 
           this.x += this.dx
           this.y += this.dy 
@@ -103,16 +101,27 @@
           ctx.fillText(`${Math.floor(this.x+this.radius)},${Math.floor(this.y-this.radius)}| ${Math.floor(this.dx)},${Math.floor(this.dy)}`, this.x, this.y);
         }
       }
-      function checkCollision(ball1, ball2) {
-        // credit https://www.reddit.com/r/javascript/comments/9rqgj4/collision_detection_between_balls/
-        const distance = Math.sqrt((ball1.x - ball2.x)**2 + (ball1.y - ball2.y)**2);
-        return distance < ball1.radius + ball2.radius;
-      }
+      
+      /*function checkCollision(ball1, ball2) {
+        // credit https://www.reddit.com/r/javascript/comments/9rqgj4/collision_detection_between_balls/, https://bytesnbits.co.uk/bounding-ball-collision-detection-game-coding-tutorial/
+
+        const d_sqr = (ball1.x - ball2.x) ** 2 + (ball1.y - ball2.y) ** 2;
+        const r_sqr = (ball1.radius + ball2.radius) ** 2;
+        return d_sqr <= r_sqr;
+      }*/
+
+      function checkCollision(ballA, ballB) {
+        const rSum = ballA.radius + ballB.radius;
+        const dx = ballB.x - ballA.x;
+        const dy = ballB.y - ballA.y;
+        return [rSum * rSum > dx * dx + dy * dy, rSum - Math.sqrt(dx * dx + dy * dy)];
+    }
+    
+
       function resizeCanvas() {
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
-        //dropCount = Math.round((canvas.width * canvas.height) / 199990 )
-        dropCount = Math.round((canvas.width * canvas.height) / 100000 )
+        dropCount = 50//Math.round((canvas.width * canvas.height) / 100000 )
         drops = []
         for (let i = 0; i < dropCount; i++) {
           drops.push(new Drop())
@@ -126,20 +135,44 @@
       function animateCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        //drops.forEach((drop) => drop.draw(ctx))
-        //drops.forEach((drop) => drop.move())
         let c = 1;
         //for (const drop of drops) {
         for (let i = 0; i < drops.length-1; i++) {
 
           //for (const drop2 of drops) {
-          for (let j = 0; j < drops.length; j++) {
-            if ( drops[i] !== drops[j] && checkCollision(drops[i], drops[j])) {
+          for (let j = i+1; j < drops.length; j++) {
+            const collision = checkCollision(drops[i], drops[j]);
+            if ( drops[i] !== drops[j] && collision[0]) {
               console.log("collision")
-              //drops[i].dx *= -1
-              //drops[i].dy *= -1
+              const ball1 = drops[i];
+              const ball2 = drops[j];
+              /*drops[i].dx *= -1
+              drops[i].dy *= -1
+              drops[j].dx *= -1
+              drops[j].dy *= -1*/
+              const deltaX = ball1.x - ball2.x
+              const deltaY = ball1.y - ball2.y
+              const impactAngle = Math.atan2(deltaY, deltaX);
+
+        // Calculate new velocities for each ball based on impact angle and original velocities
+              const tempDx1 = ball1.dx,
+                    tempDy1 = ball1.dy,
+                    tempDx2 = ball2.dx,
+                    tempDy2 = ball2.dy;
+              if (collision[1] > 0) {
+                ball1.x += collision[1] * Math.cos(impactAngle)
+                ball1.y += collision[1] * Math.sin(impactAngle)
+                ball2.x -= collision[1] * Math.cos(impactAngle)
+                ball2.y -= collision[1] * Math.sin(impactAngle)
+              } else {
+                ball1.dx = ball2.dx * Math.cos(impactAngle) +  ball2.dy * Math.sin(impactAngle);
+                ball1.dy =  ball2.dy * Math.cos(impactAngle) - ball2.dx * Math.sin(impactAngle);
+
+                ball2.dx = tempDx1 * Math.cos(impactAngle) + tempDy1 * Math.sin(impactAngle);
+                ball2.dy = tempDy1 * Math.cos(impactAngle) - tempDx1 * Math.sin(impactAngle);
+                console.log(collision[1],ball1.dx, ball1.dy, ball2.dx, ball2.dy)
+              }
             }
-            //else console.log("no collision")
           }
           drops[i].draw(ctx)
           drops[i].move()
