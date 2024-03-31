@@ -46,6 +46,7 @@
         const canvas = document.getElementById("cnvs")
         const ctx = canvas.getContext("2d")
         let cursor = {x: 0, y: 0, radius: 50}
+        let color = "#ff0000"
 
         const maxRadius = 50
         const minRadius = 10
@@ -53,6 +54,8 @@
         const maxSpeed = 0.5
 
         const LineDistance = Math.min(canvas.width, canvas.height) * 0.8
+        let LineThickness = 0
+        let lines = false
 
         let dropCount = 0
         let drops = []
@@ -60,6 +63,33 @@
         canvas.addEventListener("mousemove", (mouse) => {
             cursor.x = mouse.clientX, cursor.y = mouse.clientY
         })
+        document.getElementById("lines").addEventListener("change", (e) => {
+            lines = e.target.checked
+        })
+        document.getElementById("lt").addEventListener("change", (e) => {
+            LineThickness = e.target.value
+        })
+        document.getElementById("color").addEventListener("change", (e) => {
+            color = e.target.value
+            resizeCanvas()
+        })
+
+        function createRandomShade(hexColor) {
+            const [r, g, b] = hexColor.match(/\w{2}/g).map(hex => parseInt(hex, 16));
+
+            const baseBrightnessFactor = Math.random() * 0.6 - 0.3; // Small base adjustment
+
+            // Generate slight variation for each instance
+            const instanceVariation = Math.random() * 0.05 - 0.025;
+
+            const adjustedR = Math.round(Math.max(0, Math.min(255, r + (r * (baseBrightnessFactor + instanceVariation)))));
+            const adjustedG = Math.round(Math.max(0, Math.min(255, g + (g * (baseBrightnessFactor + instanceVariation)))));
+            const adjustedB = Math.round(Math.max(0, Math.min(255, b + (b * (baseBrightnessFactor + instanceVariation)))));
+
+            const shadeHex = `#${adjustedR.toString(16).padStart(2, '0')}${adjustedG.toString(16).padStart(2, '0')}${adjustedB.toString(16).padStart(2, '0')}`;
+
+            return shadeHex;
+        }
 
         class Drop {
             constructor() {
@@ -68,7 +98,7 @@
                 this.y = Math.random() * canvas.height
                 this.dx = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
                 this.dy = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
-                this.color = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
+                this.color = createRandomShade(color)
             }
             move() {
 
@@ -78,21 +108,8 @@
                 if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
                 if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
 
-
-
-                /*if (checkCollision(this)) {
-                    console.log("colide")
-                    if (!this.coliding) {
-                        this.coliding = true
-                        this.dx *= -1;
-                        this.dy *= -1;
-                    }
-
-                }*/
                 this.x += this.dx
                 this.y += this.dy
-
-                
             }
 
             draw(ctx) {
@@ -115,7 +132,6 @@
                     ctx.fillStyle = "white"; // Adjust text color as needed
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText(`${Math.floor(cursor.x+50)},${Math.floor(cursor.y+50)},${Math.floor(this.dy)}`, cursor.x, cursor.y);
                 }
 
 
@@ -189,16 +205,15 @@
                     };
                 }
 
-                if (document.getElementById("lines").checked) {
+                if (lines) {
                     for (let j = i+1; j < drops.length; j++) {
                         const ball2 = drops[j];
-                        console.log(document.getElementById("lt").value)
                         if (Math.abs(ball.x-ball2.x) < LineDistance && Math.abs(ball.y-ball2.y) < LineDistance) {
                             ctx.beginPath()
                             ctx.moveTo(ball.x, ball.y)
                             ctx.lineTo(ball2.x, ball2.y)
                             ctx.strokeStyle = "white"
-                            ctx.lineWidth = document.getElementById("lt").value
+                            ctx.lineWidth = LineThickness
                             ctx.stroke()
                             ctx.closePath()
 
