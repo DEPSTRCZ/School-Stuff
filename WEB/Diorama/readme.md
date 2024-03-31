@@ -26,6 +26,7 @@ Slouželi pro vysvětlení a inspiraci, některé části byly převzaty a uprav
 - https://bytesnbits.co.uk/bounding-ball-collision-detection-game-coding-tutorial/
 - https://www.w3schools.com/tags/canvas_arc.asp
 
+- https://www.youtube.com/watch?v=dQw4w9WgXcQ
 - https://www.youtube.com/watch?v=Hesgc79s7YQ
 
 - Základní kód z Teams chatu  (Ing. Bc. Michal BUBÍLEK)
