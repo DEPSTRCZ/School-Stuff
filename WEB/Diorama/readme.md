@@ -1,5 +1,6 @@
 # Diarama
 https://depstrcz.github.io/School-Stuff/WEB/Diorama/
+
 Čas strávený:
 - Koukání okolo, zkoušení, nápady 2days
 - Aktivní čas: 10hours
