@@ -89,6 +89,7 @@ Slouželi pro vysvětlení a inspiraci, některé části byly převzaty a uprav
     </div>
     <script>
         const canvas = document.getElementById("cnvs")
+        canvas.style.touchAction = "none";
         const ctx = canvas.getContext("2d")
         let cursor = {x: 0, y: 0, radius: 50}
         let color = "#3a9a86"
@@ -108,6 +109,11 @@ Slouželi pro vysvětlení a inspiraci, některé části byly převzaty a uprav
         canvas.addEventListener("mousemove", (mouse) => {
             cursor.x = mouse.clientX, cursor.y = mouse.clientY
         })
+        canvas.addEventListener("touchmove", (touchEvent) => {
+            const touch = touchEvent.touches[0] || touchEvent.changedTouches[0];
+            cursor.x = touch.clientX;
+            cursor.y = touch.clientY;
+        });
         document.getElementById("lines").addEventListener("change", (e) => {
             lines = e.target.checked
         })
