@@ -1,0 +1,39 @@
+@use "base";
+
+.gallery-item {
+    margin: 1%;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+
+    justify-content: left;
+    align-items: left;
+
+    .text {
+        position: relative;
+
+        color: #fff;
+        border-radius: 10px;
+        width: 40%;
+
+        padding: 0.5%;
+        margin-left: 0;
+        background-color: rgba(0, 0, 0, 0.2)	;
+        backdrop-filter: blur(2px);
+
+
+        h2 {
+            font-size: 1.5rem;
+            padding-left: 2%;
+        } 
+        p {
+            padding-left: 2%;
+        }
+    }
+}
