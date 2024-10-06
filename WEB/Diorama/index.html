@@ -1,3 +1,35 @@
+<!--Diorama 
+Čas strávený:
+- Koukání okolo, zkoušení, nápady 2days
+- Aktivní čas: 10hours
+- Velké díky patří [Matyáš Mikuš](https://github.com/Mleekush) (Karolína Světlá) za vysvětlení matematických výpočtů a rovnic 
+
+Sketch book:
+- Místo kde jsem zkoumal jak fungují matematické záležitosti
+- Obrázek (sketch.png)
+
+Poznámky:
+- Původně byly i kolize mezi koulemi, ale byly odstraněny kvůli komplexnosti matiky která mi znovna dvakrát nejde (old_index.html)
+- Insipirace šla z mého pozadí na mém webu (https://depstr.eu)
+
+Poznatky:
+- Tahat věci z DOM při každém cyklu je nebezpečné :D Mít méně ramek tak je po mě :x 
+- Určitě si to časově rozvrhnout a nedělat to pár hodin před deadlinem
+- Matika je těžká... 
+
+Zdroje:
+Slouželi pro vysvětlení a inspiraci, některé části byly převzaty a upraveny (CheckCOlisions)
+- https://codepen.io/ztyler/pen/LergVR
+- https://www.reddit.com/r/javascript/comments/9rqgj4/collision_detection_between_balls/
+- https://bytesnbits.co.uk/bounding-ball-collision-detection-game-coding-tutorial/
+- https://www.w3schools.com/tags/canvas_arc.asp
+
+- https://www.youtube.com/watch?v=Hesgc79s7YQ
+
+- Základní kód z Teams chatu  (Ing. Bc. Michal BUBÍLEK)
+
+
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,125 +37,232 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bubbles</title>
     <style>
-      body {
-        background: rgb(80, 100, 120);
-      }
+        body {
+            background: rgb(80, 100, 120);
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
 
-      #cnvs {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        z-index: -2;
-      }
+        #cnvs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -2;
+        }
+        .settings-card {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+    .reversed-slider {
+        direction: rtl;
+    }
+    h1 {
+        color: white;
+        text-align: center;
+    }
+    label {
+        color: white;
+        display: block;
+        margin-bottom: 5px;
+    }
     </style>
   </head>
   <body>
     <canvas id="cnvs"></canvas>
+    <div class="settings-card">
+        <h1>Settings</h1>
+        
+        <label for="lines">Lines</label>
+        <input type="checkbox" id="lines" name="lines" value="lines">
+        <label for="color">Color</label>
+        <input type="color" id="color" name="color" value="#3a9a86">
+        <label for="lt">LineThickness</label>
+        <input type="range" id="lt" name="lt" min="0" max="10" value="5">
+        <label for="amount">Amount</label>
+        <input type="range" id="amount" min="500" max="5000" value="1200" class="reversed-slider">
+
+    </div>
     <script>
-      const canvas = document.getElementById("cnvs")
-      const ctx = canvas.getContext("2d")
+        const canvas = document.getElementById("cnvs")
+        canvas.style.touchAction = "none";
+        const ctx = canvas.getContext("2d")
+        let cursor = {x: 0, y: 0, radius: 50}
+        let color = "#3a9a86"
 
-      canvas.addEventListener("mousemove", (mouse) => console.log(mouse))
-      let mx,my; 
-      canvas.addEventListener("mousemove", (mouse) => {
-        mx = mouse.clientX, my = mouse.clientY
-      })
-      const maxRadius = 50
-      const minRadius = 10
-      const maxSpeed = 0.5
-      let dropCount = 0
-      let drops = []
+        const maxRadius = 50
+        const minRadius = 10
+        const maxBounceSpeed = 5.5
+        const maxSpeed = 0.5
 
-      class Drop {
-        constructor() {
-          this.radius = Math.random() * maxRadius + minRadius
-          this.x = Math.random() * canvas.width 
-          this.y = Math.random() * canvas.height
-          this.dx = Math.random() * maxSpeed - maxSpeed / 2
-          this.dy = Math.random() * maxSpeed - maxSpeed / 2
-          this.color = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
-        }
-        move() {
+        const LineDistance = Math.min(canvas.width, canvas.height) * 0.8
+        let LineThickness = 0
+        let lines = false
 
-          if (this.x + this.radius > canvas.width && this.dx > 0) this.dx *= -1
-          if (this.x - this.radius < 0 && this.dx < 0) this.dx *= -1
+        let dropsCount = 1200
+        let drops = []
 
-          if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
-          if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
+        canvas.addEventListener("mousemove", (mouse) => {
+            cursor.x = mouse.clientX, cursor.y = mouse.clientY
+        })
+        canvas.addEventListener("touchmove", (touchEvent) => {
+            const touch = touchEvent.touches[0] || touchEvent.changedTouches[0];
+            cursor.x = touch.clientX;
+            cursor.y = touch.clientY;
+        });
+        document.getElementById("lines").addEventListener("change", (e) => {
+            lines = e.target.checked
+        })
+        document.getElementById("lt").addEventListener("change", (e) => {
+            LineThickness = e.target.value
+        })
+        document.getElementById("color").addEventListener("change", (e) => {
+            color = e.target.value
+            resizeCanvas()
+        })
+        document.getElementById("amount").addEventListener("change", (e) => {
+            dropsCount = e.target.value
+            resizeCanvas()
+        })
 
-          if (mx) {
-            if (this.x + this.radius == mx+50/* && this.dx > 0*/) this.dx *= -1
-            if (this.x - this.radius == mx+50/* && this.dx < 0*/) this.dx *= -1
-          }
+        function createRandomShade(hexColor) {
+            const [r, g, b] = hexColor.match(/\w{2}/g).map(hex => parseInt(hex, 16));
+            // Split hex into sectors by 2 chars and convert to decimal r, g, b
 
-          if (my) {
-            if (this.y + this.radius == my+50/* && this.dy > 0*/) this.dy *= -1
-            if (this.y - this.radius == my+50/* && this.dy < 0*/) this.dy *= -1
-          } 
+            const baseBrightnessFactor = Math.random() * 0.9 - 0.3;
 
-          this.x += this.dx
-          this.y += this.dy 
+            // Generate slight variation for each instance
+            const instanceVariation = Math.random() * 0.05 - 0.025;
 
-          
-        }
-        draw(ctx) {
-          ctx.beginPath()
-          ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false)
-          ctx.fillStyle = this.color
-          ctx.fill()
-          ctx.closePath()
-
-          if (mx,my) {
-            ctx.beginPath()
-            ctx.arc(mx, my, 50, 0, 2 * Math.PI, false)
-            ctx.fillStyle = `rgb(220,120,200,0.5)`
-            ctx.fill()
-            ctx.closePath()
-
-            ctx.font = "15px Arial"; // Adjust font size and family as needed
-            ctx.fillStyle = "white"; // Adjust text color as needed
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(`${Math.floor(mx+50)},${Math.floor(my+50)},${Math.floor(this.dy)}`, mx, my);
-          }
-
-
-
-          ctx.font = "15px Arial"; // Adjust font size and family as needed
-          ctx.fillStyle = "white"; // Adjust text color as needed
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(`${Math.floor(this.x+this.radius)},${Math.floor(this.y-this.radius)}| ${Math.floor(this.dx)},${Math.floor(this.dy)}`, this.x, this.y);
-        }
-      }
-      function resizeCanvas() {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
-        dropCount = Math.round((canvas.width * canvas.height) / 100000 )
-        drops = []
-        for (let i = 0; i < dropCount; i++) {
-          drops.push(new Drop())
+            const adjustedR = Math.round(Math.max(0, Math.min(255, r + (r * (baseBrightnessFactor + instanceVariation)))));
+            const adjustedG = Math.round(Math.max(0, Math.min(255, g + (g * (baseBrightnessFactor + instanceVariation)))));
+            const adjustedB = Math.round(Math.max(0, Math.min(255, b + (b * (baseBrightnessFactor + instanceVariation)))));
+            console.log(adjustedR, adjustedG, adjustedB)
+            const shadeHex = `#${adjustedR.toString(16).padStart(2, '0')}${adjustedG.toString(16).padStart(2, '0')}${adjustedB.toString(16).padStart(2, '0')}`;
+            console.log(shadeHex)
+            return shadeHex;
         }
 
-      }
+        class Drop {
+            constructor() {
+                this.radius = Math.random() * maxRadius + minRadius
+                this.x = Math.random() * canvas.width 
+                this.y = Math.random() * canvas.height
+                this.dx = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
+                this.dy = (Math.random() * maxSpeed - maxSpeed / 2) * (1 + Math.random() * 1.5 - 0.75);
+                this.color = createRandomShade(color)
+            }
+            move() {
 
-      window.onresize = resizeCanvas
-      resizeCanvas()
+                if (this.x + this.radius > canvas.width && this.dx > 0) this.dx *= -1
+                if (this.x - this.radius < 0 && this.dx < 0) this.dx *= -1
 
-      function animateCanvas() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+                if (this.y + this.radius > canvas.height && this.dy > 0) this.dy *= -1
+                if ( this.y - this.radius < 0 && this.dy < 0) this.dy *= -1
 
-        drops.forEach((drop) => drop.draw(ctx))
-        drops.forEach((drop) => drop.move())
+                const collision = checkCollision(this)
+
+                if (collision[0]) {
+                    const rSum = cursor.radius + this.radius;
+                    const ratio = rSum / (rSum - collision[1]); // (poměr zvětšení) nevím překald lol
+                    const target_deltax = ratio * (this.x - cursor.x); // násobíme poměrem velikosti  na cil x
+                    const target_deltay = ratio * (this.y - cursor.y); // násobíme poměrem velikosti  na cil y
+                    this.x = target_deltax + cursor.x;
+                    this.y = target_deltay + cursor.y;
+
+                    if (target_deltax > 0 && this.dx < 0) this.dx *= -1;
+                    if (target_deltax < 0 && this.dx > 0) this.dx *= -1;
+
+                    if (maxBounceSpeed > Math.abs(this.dx) || maxBounceSpeed > Math.abs(this.dy)) {
+                        this.dx *= 1.2;
+                        this.dy *= 1.2;
+                    };
+                } else {
+                    if (maxSpeed < Math.abs(this.dx) || maxSpeed < Math.abs(this.dy)) {
+                        this.dx *= 0.99;
+                        this.dy *= 0.99;
+                    };
+                }
 
 
-        requestAnimationFrame(animateCanvas)
-      }
 
-      animateCanvas()
+
+                this.x += this.dx
+                this.y += this.dy
+            }
+
+            draw(ctx) {
+                ctx.beginPath()
+                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false)
+                ctx.fillStyle = this.color
+                ctx.fill()
+                ctx.closePath()
+
+                if (cursor.x && cursor.y) {
+                    ctx.beginPath()
+                    ctx.arc(cursor.x, cursor.y, cursor.radius, 0, 2 * Math.PI, false)
+                    ctx.closePath()
+                }
+            }
+        }
+
+
+        //modifed & borrowed from: https://codepen.io/ztyler/pen/LergVR
+        function checkCollision(ball) {
+            const rSum = cursor.radius + ball.radius;
+            const deltax = ball.x - cursor.x;
+            const deltay = ball.y - cursor.y;
+            //            pythag
+            const colided = rSum * rSum > deltax * deltax + deltay * deltay; // avoid calc square root when no colision
+            if (!colided) return [false, 0];
+            return [colided, rSum - Math.sqrt(deltax * deltax + deltay * deltay)];
+        }
+        function resizeCanvas() {
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight
+            dropCount = Math.round((canvas.width * canvas.height) / dropsCount )
+            drops = []
+            for (let i = 0; i < dropCount; i++) {
+            drops.push(new Drop())
+            }
+
+        }
+
+        window.onresize = resizeCanvas
+        resizeCanvas()
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            for (let i = 0; i < drops.length-1; i++) {
+                const ball1 = drops[i];
+                
+                if (lines) {
+                    for (let j = i+1; j < drops.length; j++) {
+                        const ball2 = drops[j];
+                        if (Math.abs(ball1.x-ball2.x) < LineDistance && Math.abs(ball1.y-ball2.y) < LineDistance) {
+                            ctx.beginPath()
+                            ctx.moveTo(ball1.x, ball1.y)
+                            ctx.lineTo(ball2.x, ball2.y)
+                            ctx.strokeStyle = "white"
+                            ctx.lineWidth = LineThickness
+                            ctx.stroke()
+                            ctx.closePath()
+
+                        }
+                    }
+                }
+                ball1.draw(ctx)
+                ball1.move()
+            }
+            requestAnimationFrame(animateCanvas)
+        }
+
+        animateCanvas()
     </script>
   </body>
 </html>
